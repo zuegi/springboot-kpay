@@ -51,10 +51,11 @@ public class KpayApplication {
 
                 Message<Payment> message = MessageBuilder
                         .withPayload(payment)
-                        .setHeader(KafkaHeaders.MESSAGE_KEY, payment.getTxnId())
+                        .setHeader(KafkaHeaders.MESSAGE_KEY, payment.getTxnId().getBytes())
                         .build();
                 try {
                     this.paymentIncoming.send(message);
+                    log.info("Sent message: " + message.toString());
                 } catch (Exception e) {
                     log.error(e.getMessage());
                 }
