@@ -50,6 +50,18 @@ public class Payment {
         this.state = state.ordinal();
     }
 
+    public void setStateAndId(State state) {
+        this.state = state.ordinal();
+        if (state == State.credit) {
+            id = to;
+        } else if (state == State.debit) {
+            this.processStartTime = System.currentTimeMillis();
+            id = from;
+        } else {
+            id = txnId;
+        }
+    }
+
     @Override
     public String toString() {
         return "Payment{" +

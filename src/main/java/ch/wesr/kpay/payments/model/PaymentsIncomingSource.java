@@ -21,10 +21,10 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 public class PaymentsIncomingSource implements ApplicationRunner {
-    private final MessageChannel paymentIncoming;
+    private final MessageChannel paymentSource;
 
     public PaymentsIncomingSource(KpayBindings bindings) {
-        this.paymentIncoming = bindings.paymentIncoming();
+        this.paymentSource = bindings.paymentSource();
     }
 
     @Override
@@ -37,14 +37,14 @@ public class PaymentsIncomingSource implements ApplicationRunner {
             String txnId = RandomStringUtils.random(10, true, true);
             BigDecimal bigDecimal = BigDecimalGenerator.get("10.00", "150.00");
 
-            Payment payment = new Payment(txnId, "id", from, to, bigDecimal, Payment.State.complete, System.currentTimeMillis());
+            Payment payment = new Payment(txnId, "id", from, to, bigDecimal, Payment.State.incoming, System.currentTimeMillis());
 
             Message<Payment> message = MessageBuilder
                     .withPayload(payment)
                     .setHeader(KafkaHeaders.MESSAGE_KEY, payment.getTxnId().getBytes())
                     .build();
             try {
-                this.paymentIncoming.send(message);
+                this.paymentSource.send(message);
                 log.info("Sent message: " + message.toString());
             } catch (Exception e) {
                 log.error(e.getMessage());

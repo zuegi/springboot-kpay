@@ -4,3 +4,6 @@
 * [Journey to Event Driven 2](https://www.confluent.io/blog/journey-to-event-driven-part-2-programming-models-event-driven-architecture)
 * [Journey to Event Driven 3](https://www.confluent.io/blog/journey-to-event-driven-part-3-affinity-between-events-streams-serverless)
 * [Journey to Event Driven 4](https://www.confluent.io/blog/journey-to-event-driven-part-4-four-pillars-of-event-streaming-microservices)
+
+And the 
+*[Spring Cloud Stream Kafka Streams from @starbuxman](https://www.youtube.com/watch?v=YPDzcmqwCNo)
