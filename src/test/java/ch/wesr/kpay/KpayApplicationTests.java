@@ -11,6 +11,7 @@ public class KpayApplicationTests {
 
     @Test
     public void contextLoads() {
+        System.out.println("Hallo");
     }
 
 }

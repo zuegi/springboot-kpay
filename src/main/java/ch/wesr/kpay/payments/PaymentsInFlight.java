@@ -1,6 +1,6 @@
 package ch.wesr.kpay.payments;
 
-import ch.wesr.kpay.KpayBindings;
+import ch.wesr.kpay.payments.config.KpayBindings;
 import ch.wesr.kpay.payments.model.Payment;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serdes;
@@ -28,11 +28,11 @@ public class PaymentsInFlight {
 
     @StreamListener
     @SendTo(KpayBindings.PAYMENT_INFLIGHT_OUT)
-    public KStream<String, Payment>process(@Input(KpayBindings.PAYMENT_INCOMING) KStream<String, Payment> paymentKStream) {
+    public KStream<String, Payment> process(@Input (KpayBindings.PAYMENT_INCOMING) KStream<String, Payment> paymentKStream) {
 
-        paymentKStream.foreach((key, value) -> {
+        /*paymentKStream.foreach((key, value) -> {
             log.info("key: {}, value {}", key, value.toString());
-        });
+        });*/
 
        paymentKStream
 //                .groupBy((key, value) -> Integer.toString(key.hashCode() % 10))// reduce event key space for cross event aggregation
@@ -53,7 +53,6 @@ public class PaymentsInFlight {
             }
             return new KeyValue<>(value.getId(), value);
         }).filter((key, value) -> value.getState() == Payment.State.debit);
-      /* .foreach((key, value) -> {log.info("key: {}, value {}", key, value.toString());})*/
 
     }
 }

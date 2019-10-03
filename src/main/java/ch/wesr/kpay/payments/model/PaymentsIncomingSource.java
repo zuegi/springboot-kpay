@@ -1,6 +1,6 @@
 package ch.wesr.kpay.payments.model;
 
-import ch.wesr.kpay.KpayBindings;
+import ch.wesr.kpay.payments.config.KpayBindings;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.boot.ApplicationArguments;
@@ -24,7 +24,7 @@ public class PaymentsIncomingSource implements ApplicationRunner {
     private final MessageChannel paymentSource;
 
     public PaymentsIncomingSource(KpayBindings bindings) {
-        this.paymentSource = bindings.paymentSource();
+        this.paymentSource = bindings.paymentIncomingOut();
     }
 
     @Override
