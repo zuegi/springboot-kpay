@@ -11,7 +11,9 @@ public interface KpayBindings {
     String PAYMENT_INCOMING_OUT = "pincout";
     String PAYMENT_INCOMING = "pinc";
     String PAYMENT_INFLIGHT_OUT = "pinfout";
+    String PAYMENT_INFLIGHT_OUT_OUT = "pinfoutout";
     String PAYMENT_INFLIGHT = "pinf";
+    String PAYMENT_COMPLETE_OUT = "pcoout";
 
     @Output(PAYMENT_INCOMING_OUT)
     MessageChannel paymentIncomingOut();
@@ -24,4 +26,11 @@ public interface KpayBindings {
 
     @Input(PAYMENT_INFLIGHT)
     KStream<String, Payment> paymentInflight();
+
+    @Output(PAYMENT_INFLIGHT_OUT_OUT)
+    KStream<String, Payment> paymentInflightOutOut();
+
+    @Output(PAYMENT_COMPLETE_OUT)
+    KStream<String, Payment> paymentCompleteOut();
+
 }
