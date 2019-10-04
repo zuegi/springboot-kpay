@@ -1,4 +1,4 @@
-package ch.wesr.kpay.payments;
+package ch.wesr.kpay.payments.processors;
 
 import ch.wesr.kpay.payments.config.KpayBindings;
 import ch.wesr.kpay.payments.model.AccountBalance;

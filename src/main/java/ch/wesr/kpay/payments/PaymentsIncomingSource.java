@@ -1,6 +1,7 @@
-package ch.wesr.kpay.payments.model;
+package ch.wesr.kpay.payments;
 
 import ch.wesr.kpay.payments.config.KpayBindings;
+import ch.wesr.kpay.payments.model.Payment;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.boot.ApplicationArguments;

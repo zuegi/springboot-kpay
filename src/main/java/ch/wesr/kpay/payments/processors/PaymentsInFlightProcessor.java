@@ -1,6 +1,7 @@
-package ch.wesr.kpay.payments;
+package ch.wesr.kpay.payments.processors;
 
 import ch.wesr.kpay.payments.config.KpayBindings;
+import ch.wesr.kpay.payments.model.InflightStats;
 import ch.wesr.kpay.payments.model.Payment;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serdes;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class PaymentsInFlight {
+public class PaymentsInFlightProcessor {
 
     public static final String STORE_NAME = "inflight";
     private static long ONE_DAY = 24 * 60 * 60 * 1000L;

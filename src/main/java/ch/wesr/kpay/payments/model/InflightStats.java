@@ -1,6 +1,5 @@
-package ch.wesr.kpay.payments;
+package ch.wesr.kpay.payments.model;
 
-import ch.wesr.kpay.payments.model.Payment;
 import ch.wesr.kpay.util.JsonDeserializer;
 import ch.wesr.kpay.util.JsonSerializer;
 import ch.wesr.kpay.util.WrapperSerde;
@@ -8,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
