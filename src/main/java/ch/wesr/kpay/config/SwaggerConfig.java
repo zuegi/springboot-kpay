@@ -1,4 +1,4 @@
-package ch.wesr.kpay.payments.config;
+package ch.wesr.kpay.config;
 
 
 import org.springframework.context.annotation.Bean;

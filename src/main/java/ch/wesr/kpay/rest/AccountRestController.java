@@ -1,4 +1,4 @@
-package ch.wesr.kpay.payments.rest;
+package ch.wesr.kpay.rest;
 
 import ch.wesr.kpay.payments.model.Payment;
 import ch.wesr.kpay.payments.processors.AccountProcessor;
@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController("/api")
-public class AccountController {
+public class AccountRestController {
 
 
     @Autowired
     private InteractiveQueryService interactiveQueryService;
 
 
-    @GetMapping("list")
+    @GetMapping("listAccounts")
     public KeyValueIterator<String, Payment> listAccounts(){
 
         ReadOnlyKeyValueStore<String, Payment> paymentStore = interactiveQueryService.getQueryableStore(AccountProcessor.STORE_NAME, QueryableStoreTypes.<String, Payment>keyValueStore());

@@ -63,7 +63,7 @@ public class AccountBalance {
             // report to dead letter queue via exception handler
             throw new RuntimeException("Invalid payment received:" + value);
         }
-        log.info("      id: {} amount: {}", this.name, this.amount.doubleValue());
+        log.debug("      id: {} amount: {}", this.name, this.amount.doubleValue());
 
         this.lastPayment = value;
         return this;
@@ -109,7 +109,7 @@ public class AccountBalance {
 
                 @Override
                 public KeyValue<String, Payment> transform(String key, AccountBalance value) {
-                    log.info(" handling: {} {}", value, value.lastPayment);
+                    log.debug(" handling: {} {}", value, value.lastPayment);
                     Payment payment = value.lastPayment;
                     if (payment.getState() == Payment.State.debit) {
                         // we have to rekey to the debit account so the 'debit' request is sent to the right AccountProcessor<accountId>
@@ -166,7 +166,7 @@ public class AccountBalance {
                 @Override
                 public byte[] serialize(String topic, Payment payment) {
 
-                    log.info(" serialize: {}", payment);
+                    log.debug(" serialize: {}", payment);
 
                     if (payment.getState() == Payment.State.debit) {
                         payment.setStateAndId(Payment.State.credit);

@@ -1,10 +1,7 @@
-package ch.wesr.kpay.payments.config;
+package ch.wesr.kpay.config;
 
-import ch.wesr.kpay.payments.model.ConfirmedStats;
 import ch.wesr.kpay.payments.model.Payment;
 import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.KTable;
-import org.apache.kafka.streams.kstream.Windowed;
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.cloud.stream.annotation.Output;
 import org.springframework.messaging.MessageChannel;

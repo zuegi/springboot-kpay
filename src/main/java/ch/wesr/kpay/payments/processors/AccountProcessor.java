@@ -1,6 +1,6 @@
 package ch.wesr.kpay.payments.processors;
 
-import ch.wesr.kpay.payments.config.KpayBindings;
+import ch.wesr.kpay.config.KpayBindings;
 import ch.wesr.kpay.payments.model.AccountBalance;
 import ch.wesr.kpay.payments.model.Payment;
 import lombok.extern.slf4j.Slf4j;

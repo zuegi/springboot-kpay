@@ -1,6 +1,6 @@
 package ch.wesr.kpay.payments;
 
-import ch.wesr.kpay.payments.config.KpayBindings;
+import ch.wesr.kpay.config.KpayBindings;
 import ch.wesr.kpay.payments.model.Payment;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -46,7 +46,7 @@ public class PaymentsIncomingSource implements ApplicationRunner {
                     .build();
             try {
                 this.paymentSource.send(message);
-                log.info("Sent message: " + message.toString());
+                log.debug("Sent message: " + message.toString());
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
