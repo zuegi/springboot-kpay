@@ -2,43 +2,82 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Account</title>
+    <title>KPay - Apache Kafka Payment Processing with Spring Boot and Spring Cloud Streams</title>
 </head>
 <body>
-<div class="container-fluid">
-        <table id="accountTable" class="display" width="100%">
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th>Total amount</th>
-                <th>Last amount</th>
-                <th>TxnId</th>
-                <th>From</th>
-                <th>To</th>
-                <th>State</th>
-            </tr>
-            </thead>
-            <tfoot>
-            <tr>
-                <th>Name</th>
-                <th>Total amount</th>
-                <th>Last amount</th>
-                <th>TxnId</th>
-                <th>From</th>
-                <th>To</th>
-                <th>State</th>
-            </tr>
-            </tfoot>
-        </table>
 
+<div class="container-fluid">
+
+    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+
+        <a class="navbar col-sm-3 col-md-2 mr-0" style="padding-top:2px;padding-bottom:2px;" href="#">
+            <i class="fas fa-chart-line"></i>
+        </a>
+
+
+        <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+
+    </nav>
+
+    <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <span data-feather="home"></span>
+                            Status <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/swagger-ui.html#" target="_blank">
+                            <span data-feather="layers"></span>
+                            Swagger UI
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </nav>
+
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <div class="table-responsive">
+            <table id="accountTable" class="display" width="100%">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Total amount</th>
+                    <th>Last amount</th>
+                    <th>TxnId</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>State</th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <th>Name</th>
+                    <th>Total amount</th>
+                    <th>Last amount</th>
+                    <th>TxnId</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>State</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </main>
 </div>
 
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<!--    <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>-->
+<link rel="stylesheet" href="/webjars/datatables/css/jquery.dataTables.min.css" crossorigin="anonymous">
+<!--<link href="/dashboard.css" rel="stylesheet">-->
 <link href="/main.css" rel="stylesheet">
+
 <script src="/webjars/jquery/jquery.min.js"></script>
 <script src="/webjars/datatables/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
 <script src="/webjars/sockjs-client/sockjs.min.js"></script>
