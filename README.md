@@ -1,5 +1,7 @@
 # KPay Version with Spring Boot
 
+There is still a lot to do, but try it out and improve
+
 ## Run within your IDE
 
 > Run java class  ch.wesr.kpay.KpayApplication 

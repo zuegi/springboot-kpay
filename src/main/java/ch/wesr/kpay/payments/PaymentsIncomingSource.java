@@ -4,6 +4,7 @@ import ch.wesr.kpay.config.KpayBindings;
 import ch.wesr.kpay.payments.model.Payment;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -22,6 +23,16 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 public class PaymentsIncomingSource implements ApplicationRunner {
+
+    @Value("${kpay.executors.corePoolSize}")
+    private int corePoolSize;
+
+    @Value("${kpay.executors.initialDelay}")
+    private int initalDelay;
+
+    @Value("${kpay.executors.period}")
+    private int period;
+
     private final MessageChannel paymentSource;
 
     public PaymentsIncomingSource(KpayBindings bindings) {
@@ -46,12 +57,12 @@ public class PaymentsIncomingSource implements ApplicationRunner {
                     .build();
             try {
                 this.paymentSource.send(message);
-                log.debug("Sent message: " + message.toString());
+                log.info("Sent message: " + message.toString());
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
         };
-        Executors.newScheduledThreadPool(1).scheduleAtFixedRate(runnable, 1, 1, TimeUnit.SECONDS);
+        Executors.newScheduledThreadPool(corePoolSize).scheduleAtFixedRate(runnable, initalDelay, period, TimeUnit.SECONDS);
     }
 }
 
