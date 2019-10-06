@@ -9,13 +9,13 @@ $(document).ready(function () {
             dataSrc: ''
         },
         "columns": [
-            {"data": "key"},
             {"data": "value.name"},
+            {"data": "value.amount"},
+            {"data": "value.lastPayment.amount"},
             {"data": "value.lastPayment.txnId"},
             {"data": "value.lastPayment.from"},
             {"data": "value.lastPayment.to"},
-            {"data": "value.lastPayment.state"},
-            {"data": "value.lastPayment.amount"}
+            {"data": "value.lastPayment.state"}
         ]
     });
 
@@ -24,16 +24,18 @@ $(document).ready(function () {
 {
     "key": "carsten",
     "value": {
-    "name": "carsten",
-        "lastPayment": {
+      "name": "carsten",
+      "lastPayment": {
         "id": "carsten",
-            "txnId": "iqOzAaTQXy",
-            "from": "ueli",
-            "to": "carsten",
-            "amount": 100.988945647705,
-            "state": "credit",
-            "timestamp": 1570368126158,
-            "processStartTime": 1570368126167
-    },
-    "amount": -3698.4777639538847
-}*/
+        "txnId": "IE5041Zx3X",
+        "from": "lars",
+        "to": "carsten",
+        "amount": 13.32706889812972,
+        "state": "credit",
+        "timestamp": 1570379624766,
+        "processStartTime": 1570379624768
+      },
+      "amount": -4989.541702683642
+    }
+  }
+*/
