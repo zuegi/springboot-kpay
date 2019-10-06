@@ -9,6 +9,10 @@
  - SWAGGER: http://localhost:8080/swagger-ui.html# 
  - REST: http://localhost:8080/api/listAccounts
 
+## Requirements
+ - Kafka running - best run [Confluent within docker](https://docs.confluent.io/current/quickstart/ce-docker-quickstart.html)
+
+## Inspired by and copied from
 
 * [Original Kpay from Confluent](https://github.com/confluentinc/demo-scene/tree/master/scalable-payment-processing)
 * [Journey to Event Driven 1](https://www.confluent.io/blog/journey-to-event-driven-part-1-why-event-first-thinking-changes-everything)
