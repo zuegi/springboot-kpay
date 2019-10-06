@@ -75,6 +75,10 @@ public class Payment {
     }
 
 
+    public long getElapsedMillis(){
+        return System.currentTimeMillis() - this.processStartTime;
+    }
+
     static public final class Serde extends WrapperSerde<Payment> {
         public Serde() {
             super(new JsonSerializer<>(), new JsonDeserializer<>(Payment.class));

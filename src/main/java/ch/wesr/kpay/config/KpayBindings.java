@@ -15,6 +15,7 @@ public interface KpayBindings {
     String PAYMENT_INFLIGHT = "pinf";
     String PAYMENT_COMPLETE_OUT = "pcoout";
     String PAYMENT_COMPLETE = "pcom";
+    String PAYMENT_COMPLETE_THROUGHPUT = "pcomthroughput";
     String PAYMENT_CONFIRMED_OUT = "pconfout";
 
     @Output(PAYMENT_INCOMING_OUT)
@@ -37,6 +38,9 @@ public interface KpayBindings {
 
     @Input(PAYMENT_COMPLETE)
     KStream<String, Payment> paymentComplete();
+
+    @Input(PAYMENT_COMPLETE_THROUGHPUT)
+    KStream<String, Payment> paymentCompleteThroughput();
 
     @Output(PAYMENT_CONFIRMED_OUT)
     KStream<String, Payment>  paymentConfirmedOut();
