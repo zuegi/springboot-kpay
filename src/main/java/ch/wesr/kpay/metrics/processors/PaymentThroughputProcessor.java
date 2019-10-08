@@ -35,8 +35,8 @@ public class PaymentThroughputProcessor {
     public void process(@Input(KpayBindings.PAYMENT_COMPLETE_THROUGHPUT) KStream<String, Payment> complete) {
         log.info("complete: " + complete);
         statsKTable = complete
-//                .groupBy((key, value) -> "all-payments") // forces a repartition
-                .groupByKey()
+                .groupBy((key, value) -> "all-payments") // forces a repartition
+//                .groupByKey()
                 .windowedBy(TimeWindows.of(ONE_MINUTE))
                 .aggregate(
                         ThroughputStats::new,

@@ -31,13 +31,9 @@ public class PaymentsInFlightProcessor {
     @SendTo(KpayBindings.PAYMENT_INFLIGHT_OUT)
     public KStream<String, Payment> process(@Input (KpayBindings.PAYMENT_INCOMING) KStream<String, Payment> paymentKStream) {
 
-        /*paymentKStream.foreach((key, value) -> {
-            log.info("key: {}, value {}", key, value.toString());
-        });*/
-
        paymentKStream
-//                .groupBy((key, value) -> Integer.toString(key.hashCode() % 10))// reduce event key space for cross event aggregation
-               .groupByKey()
+                .groupBy((key, value) -> Integer.toString(key.hashCode() % 10))// reduce event key space for cross event aggregation
+//               .groupByKey()
                .windowedBy(TimeWindows.of(ONE_DAY))
                 .aggregate(
                         InflightStats::new,

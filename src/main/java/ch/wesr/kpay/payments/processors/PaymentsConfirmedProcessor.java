@@ -6,7 +6,9 @@ import ch.wesr.kpay.payments.model.Payment;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.utils.Bytes;
+import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.kstream.*;
+import org.apache.kafka.streams.processor.ProcessorContext;
 import org.apache.kafka.streams.state.WindowStore;
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.cloud.stream.annotation.StreamListener;
@@ -27,19 +29,24 @@ public class PaymentsConfirmedProcessor {
     @SendTo(KpayBindings.PAYMENT_CONFIRMED_OUT)
     public KStream<String, Payment> process(@Input(KpayBindings.PAYMENT_COMPLETE) KStream<String, Payment> complete) {
 
-        /*complete.foreach((key, value) -> {
-            log.info("class: {}, key: {}, value {}", this.getClass(), key, value.toString());
-        });*/
+        KStream<String, Payment> completeStream = complete.map((KeyValueMapper<String, Payment, KeyValue<String, Payment>>) (key, value) -> {
+            if (value.getState() == Payment.State.complete) {
+                value.setStateAndId(Payment.State.confirmed);
+            }
+            return new KeyValue<>(value.getId(), value);
+        });
 
         complete
-//                .groupBy((key, value) -> Integer.toString(key.hashCode() % 10)) // redistribute to restricted key-set
-                .groupByKey()
+                .groupBy((key, value) -> Integer.toString(key.hashCode() % 10)) // redistribute to restricted key-set
+//                .groupByKey()
                 .windowedBy(TimeWindows.of(ONE_DAY))
                 .aggregate(
                         ConfirmedStats::new,
                         (key, value, aggregate) -> aggregate.update(value),
                         confirmedWindowStore
                 );
-        return complete.filter((key, value) -> value.getState()== Payment.State.complete);
+
+        return completeStream;
+
     }
 }
