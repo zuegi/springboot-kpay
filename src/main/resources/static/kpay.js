@@ -1,8 +1,9 @@
 var chart;
 var paymentPipelineChart;
+var accountTable;
 
 $(document).ready(function () {
-    $('#accountTable').DataTable({
+    accountTable = $('#accountTable').DataTable({
         ajax: {
             url: 'http://localhost:8080/api/listAccounts',
             method: "GET",
@@ -275,3 +276,9 @@ function refreshPaymentPipelineChart() {
         }
     })
 }
+
+setInterval(function(){
+    refreshLatencyChart();
+    refreshPaymentPipelineChart();
+    accountTable.ajax.reload();
+}, 5000);
