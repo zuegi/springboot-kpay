@@ -44,6 +44,11 @@ public class InflightStats {
                 '}';
     }
 
+    public void add(InflightStats other) {
+        this.amount.add(other.amount);
+        this.count += other.count;
+    }
+
     static public final class Serde extends WrapperSerde<InflightStats> {
         public Serde() {
             super(new JsonSerializer<>(), new JsonDeserializer(InflightStats.class));
