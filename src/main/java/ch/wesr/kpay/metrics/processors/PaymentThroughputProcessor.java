@@ -52,4 +52,12 @@ public class PaymentThroughputProcessor {
             processedLast = key.window().end();
         });
     }
+
+    /**
+     * Expose statistics for rendering
+     * @return
+     */
+    public ThroughputStats getStats() {
+        return stats.merge(lastStats);
+    }
 }
