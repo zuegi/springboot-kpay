@@ -10,16 +10,17 @@ import ch.wesr.kpay.payments.processors.PaymentsConfirmedProcessor;
 import ch.wesr.kpay.payments.processors.PaymentsInFlightProcessor;
 import ch.wesr.kpay.util.Pair;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.streams.KeyValue;
-import org.apache.kafka.streams.kstream.Windowed;
-import org.apache.kafka.streams.state.*;
+import org.apache.kafka.streams.state.QueryableStoreTypes;
+import org.apache.kafka.streams.state.ReadOnlyWindowStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.binder.kafka.streams.InteractiveQueryService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -40,11 +41,6 @@ public class MetricsController {
         return paymentThroughputProcessor.getStats();
     }
 
-
-    @GetMapping("getAllTroughputs")
-    public ReadOnlyKeyValueStore<String, Payment> getAllMetrics() {
-        return interactiveQueryService.getQueryableStore("throughput", QueryableStoreTypes.<String, Payment>keyValueStore());
-    }
 
     @GetMapping("pipeline")
     public Pair<InflightStats, ConfirmedStats> pipelineStats() {

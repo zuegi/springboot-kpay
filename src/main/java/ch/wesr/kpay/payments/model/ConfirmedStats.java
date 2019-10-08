@@ -25,11 +25,13 @@ public class ConfirmedStats {
         this.timestamp = System.currentTimeMillis();
         log.debug("handle:{}" + value);
         if (value.getState() == Payment.State.confirmed) {
+            log.debug("Payment.State: {}", value.getState());
             // remove 'complete'd payments
             this.amount = this.amount.add(value.getAmount());
             this.count++;
         } else {
             // log error
+            log.error("PaymentState not confirmed: [{}]", value.getState());
         }
         return this;
     }
