@@ -15,7 +15,7 @@ public interface KpayBindings {
     String PAYMENT_INFLIGHT = "pinf";
     String PAYMENT_COMPLETE_OUT = "pcoout";
     String PAYMENT_COMPLETE = "pcom";
-    String PAYMENT_COMPLETE_THROUGHPUT = "pcomthroughput";
+    String PAYMENT_COMPLETE_THROUGHPUT = "pcothroughput";
     String PAYMENT_CONFIRMED_OUT = "pconfout";
 
     @Output(PAYMENT_INCOMING_OUT)

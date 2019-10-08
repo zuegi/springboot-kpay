@@ -6,6 +6,7 @@ import ch.wesr.kpay.payments.model.Payment;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.utils.Bytes;
+import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.*;
 import org.apache.kafka.streams.state.WindowStore;
 import org.slf4j.Logger;
@@ -32,8 +33,10 @@ public class PaymentThroughputProcessor {
 
     @StreamListener
     public void process(@Input(KpayBindings.PAYMENT_COMPLETE_THROUGHPUT) KStream<String, Payment> complete) {
+        log.info("complete: " + complete);
         statsKTable = complete
-                .groupBy((key, value) -> "all-payments") // forces a repartition
+//                .groupBy((key, value) -> "all-payments") // forces a repartition
+                .groupByKey()
                 .windowedBy(TimeWindows.of(ONE_MINUTE))
                 .aggregate(
                         ThroughputStats::new,
