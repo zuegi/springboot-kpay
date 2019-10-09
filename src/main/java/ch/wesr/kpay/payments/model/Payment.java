@@ -1,9 +1,6 @@
 package ch.wesr.kpay.payments.model;
 
 
-import ch.wesr.kpay.util.JsonDeserializer;
-import ch.wesr.kpay.util.JsonSerializer;
-import ch.wesr.kpay.util.WrapperSerde;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

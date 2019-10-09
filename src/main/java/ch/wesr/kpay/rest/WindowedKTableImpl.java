@@ -1,7 +1,5 @@
 package ch.wesr.kpay.rest;
 
-import ch.wesr.kpay.payments.model.InflightStats;
-import ch.wesr.kpay.payments.model.Payment;
 import ch.wesr.kpay.util.Pair;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.streams.KeyValue;
@@ -10,7 +8,10 @@ import org.apache.kafka.streams.state.KeyValueIterator;
 import org.apache.kafka.streams.state.ReadOnlyWindowStore;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 @Slf4j

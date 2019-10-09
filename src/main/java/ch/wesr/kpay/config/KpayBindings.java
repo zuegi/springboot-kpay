@@ -18,6 +18,8 @@ public interface KpayBindings {
     String PAYMENT_COMPLETE_THROUGHPUT = "pcothroughput";
     String PAYMENT_CONFIRMED_OUT = "pconfout";
 
+    public static final String STORE_NAME_INFLIGHT_METRICS = "inflight";
+
     @Output(PAYMENT_INCOMING_OUT)
     MessageChannel paymentIncomingOut();
 

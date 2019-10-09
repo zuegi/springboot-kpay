@@ -1,8 +1,5 @@
 package ch.wesr.kpay.payments.model;
 
-import ch.wesr.kpay.util.JsonDeserializer;
-import ch.wesr.kpay.util.JsonSerializer;
-import ch.wesr.kpay.util.WrapperSerde;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -50,9 +47,5 @@ public class ConfirmedStats {
         this.amount.add(other.getAmount().setScale(2, RoundingMode.CEILING));
     }
 
-    static public final class Serde extends WrapperSerde<ConfirmedStats> {
-        public Serde() {
-            super(new JsonSerializer<>(), new JsonDeserializer(ConfirmedStats.class));
-        }
-    }
+
 }

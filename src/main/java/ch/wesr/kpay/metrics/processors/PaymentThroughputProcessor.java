@@ -6,13 +6,12 @@ import ch.wesr.kpay.payments.model.Payment;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.utils.Bytes;
-import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.*;
 import org.apache.kafka.streams.state.WindowStore;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.kafka.support.serializer.JsonSerde;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -28,8 +27,13 @@ public class PaymentThroughputProcessor {
     /**
      * Data flow; emit the payments as Confirmed once they have been processed
      */
-    Materialized<String, ThroughputStats, WindowStore<Bytes, byte[]>> completeStore = Materialized.as("throughput");
-    Materialized<String, ThroughputStats, WindowStore<Bytes, byte[]>> completeWindowStore = completeStore.withKeySerde(new Serdes.StringSerde()).withValueSerde(new ThroughputStats.Serde());
+    private final Materialized<String, ThroughputStats, WindowStore<Bytes, byte[]>> completeStore;
+    private final Materialized<String, ThroughputStats, WindowStore<Bytes, byte[]>> completeWindowStore;
+
+    public PaymentThroughputProcessor(@Qualifier("valueThroughputsStatsJsonSerde") JsonSerde valueThroughputsStatsJsonSerde) {
+        this.completeStore = Materialized.as("throughput");
+        this.completeWindowStore = completeStore.withKeySerde(new Serdes.StringSerde()).withValueSerde(valueThroughputsStatsJsonSerde);
+    }
 
     @StreamListener
     public void process(@Input(KpayBindings.PAYMENT_COMPLETE_THROUGHPUT) KStream<String, Payment> complete) {
@@ -58,6 +62,7 @@ public class PaymentThroughputProcessor {
 
     /**
      * Expose statistics for rendering
+     *
      * @return
      */
     public ThroughputStats getStats() {

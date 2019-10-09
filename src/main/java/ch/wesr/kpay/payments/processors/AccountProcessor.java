@@ -7,10 +7,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.KeyValue;
-import org.apache.kafka.streams.kstream.*;
+import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.KeyValueMapper;
+import org.apache.kafka.streams.kstream.Materialized;
+import org.apache.kafka.streams.kstream.Predicate;
 import org.apache.kafka.streams.state.KeyValueStore;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.kafka.support.serializer.JsonSerde;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Component;
 
@@ -20,8 +25,15 @@ public class AccountProcessor {
 
     public static final String STORE_NAME = "account";
 
-    private Materialized<String, AccountBalance, KeyValueStore<Bytes, byte[]>> account = Materialized.as(STORE_NAME);
-    private Materialized<String, AccountBalance, KeyValueStore<Bytes, byte[]>> accountStore = account.withKeySerde(new Serdes.StringSerde()).withValueSerde(new AccountBalance.Serde());
+
+    private final Materialized<String, AccountBalance, KeyValueStore<Bytes, byte[]>> account;
+    private final Materialized<String, AccountBalance, KeyValueStore<Bytes, byte[]>> accountStore;
+
+    public AccountProcessor(@Qualifier("valueAccountBalanceJsonSerde") JsonSerde valueJsonSerde) {
+        this.account = Materialized.as(STORE_NAME);
+        this.accountStore = account.withKeySerde(new Serdes.StringSerde()).withValueSerde(
+                valueJsonSerde);
+    }
 
     @SuppressWarnings("unchecked")
     @StreamListener

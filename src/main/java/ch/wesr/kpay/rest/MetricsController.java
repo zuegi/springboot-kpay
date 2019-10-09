@@ -1,13 +1,13 @@
 package ch.wesr.kpay.rest;
 
 
+import ch.wesr.kpay.config.KpayBindings;
 import ch.wesr.kpay.metrics.model.ThroughputStats;
 import ch.wesr.kpay.metrics.processors.PaymentThroughputProcessor;
 import ch.wesr.kpay.payments.model.ConfirmedStats;
 import ch.wesr.kpay.payments.model.InflightStats;
 import ch.wesr.kpay.payments.model.Payment;
 import ch.wesr.kpay.payments.processors.PaymentsConfirmedProcessor;
-import ch.wesr.kpay.payments.processors.PaymentsInFlightProcessor;
 import ch.wesr.kpay.util.Pair;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.streams.state.QueryableStoreTypes;
@@ -45,7 +45,7 @@ public class MetricsController {
     @GetMapping("pipeline")
     public Pair<InflightStats, ConfirmedStats> pipelineStats() {
 
-        ReadOnlyWindowStore<String, Payment> paymentInflightStore = interactiveQueryService.getQueryableStore(PaymentsInFlightProcessor.STORE_NAME, QueryableStoreTypes.<String, Payment>windowStore());
+        ReadOnlyWindowStore<String, Payment> paymentInflightStore = interactiveQueryService.getQueryableStore(KpayBindings.STORE_NAME_INFLIGHT_METRICS, QueryableStoreTypes.<String, Payment>windowStore());
         List<Pair<String, InflightStats>> inflightStats = this.windowedKTableImpl.get(paymentInflightStore, new ArrayList<>(this.windowedKTableImpl.keySet(paymentInflightStore)));
 
         ReadOnlyWindowStore<String, Payment> confirmedStore = interactiveQueryService.getQueryableStore(PaymentsConfirmedProcessor.STORE_NAME, QueryableStoreTypes.<String, Payment>windowStore());

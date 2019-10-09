@@ -6,21 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.kafka.support.KafkaHeaders;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageChannel;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component
@@ -63,6 +56,8 @@ class BigDecimalGenerator {
         BigDecimal min = new BigDecimal(minString);
         BigDecimal max = new BigDecimal(maxString);
         BigDecimal range = max.subtract(min);
-        return min.add(range.multiply(new BigDecimal(Math.random())));
+        BigDecimal amount = min.add(range.multiply(new BigDecimal(Math.random())));
+        amount = amount.setScale(2, RoundingMode.CEILING);
+        return amount;
     }
 }

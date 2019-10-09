@@ -1,8 +1,5 @@
 package ch.wesr.kpay.payments.model;
 
-import ch.wesr.kpay.util.JsonDeserializer;
-import ch.wesr.kpay.util.JsonSerializer;
-import ch.wesr.kpay.util.WrapperSerde;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -50,9 +47,4 @@ public class InflightStats {
         this.count += other.count;
     }
 
-    static public final class Serde extends WrapperSerde<InflightStats> {
-        public Serde() {
-            super(new JsonSerializer<>(), new JsonDeserializer(InflightStats.class));
-        }
-    }
 }
