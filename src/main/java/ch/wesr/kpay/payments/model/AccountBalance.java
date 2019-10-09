@@ -1,19 +1,14 @@
 package ch.wesr.kpay.payments.model;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-/**
- * TODO: need validation mechanism to ensure accounts were created correctly = i.e. prevent adhoc account creation
- * <p>
- * TODO: pauseMaybe there is enough money in the account
- */
+@Slf4j
 public class AccountBalance {
-
-    static Logger log = LoggerFactory.getLogger(AccountBalance.class);
 
     public String getName() {
         return name;

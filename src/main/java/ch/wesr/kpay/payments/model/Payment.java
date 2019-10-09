@@ -68,6 +68,7 @@ public class Payment {
                 ", to='" + to + '\'' +
                 ", amount=" + amount.doubleValue() +
                 ", state=" + getState() +
+                ", timestamp=" + getTimestamp() +
                 '}';
     }
 
