@@ -34,7 +34,7 @@ public class MetricsController {
     private InteractiveQueryService interactiveQueryService;
 
     @Autowired
-    private WindowedKTableResource windowedKTableResource;
+    private WindowedKTableImpl windowedKTableImpl;
 
     @GetMapping("throughput")
     public ThroughputStats viewMetrics() {
@@ -46,10 +46,10 @@ public class MetricsController {
     public Pair<InflightStats, ConfirmedStats> pipelineStats() {
 
         ReadOnlyWindowStore<String, Payment> paymentInflightStore = interactiveQueryService.getQueryableStore(PaymentsInFlightProcessor.STORE_NAME, QueryableStoreTypes.<String, Payment>windowStore());
-        List<Pair<String, InflightStats>> inflightStats = this.windowedKTableResource.get(paymentInflightStore, new ArrayList<>(this.windowedKTableResource.keySet(paymentInflightStore)));
+        List<Pair<String, InflightStats>> inflightStats = this.windowedKTableImpl.get(paymentInflightStore, new ArrayList<>(this.windowedKTableImpl.keySet(paymentInflightStore)));
 
         ReadOnlyWindowStore<String, Payment> confirmedStore = interactiveQueryService.getQueryableStore(PaymentsConfirmedProcessor.STORE_NAME, QueryableStoreTypes.<String, Payment>windowStore());
-        List<Pair<String, ConfirmedStats>> confirmedStats = this.windowedKTableResource.get(confirmedStore, new ArrayList<>(this.windowedKTableResource.keySet(confirmedStore)));
+        List<Pair<String, ConfirmedStats>> confirmedStats = this.windowedKTableImpl.get(confirmedStore, new ArrayList<>(this.windowedKTableImpl.keySet(confirmedStore)));
 
         if (inflightStats.size() == 0 || confirmedStats.size() == 0) return new Pair<>(new InflightStats(), new ConfirmedStats());
 

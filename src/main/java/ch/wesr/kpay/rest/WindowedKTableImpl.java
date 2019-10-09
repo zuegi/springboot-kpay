@@ -15,7 +15,7 @@ import java.util.*;
 
 @Slf4j
 @Component
-public class WindowedKTableResource<K,V> implements WindowedKTable<K, V> {
+public class WindowedKTableImpl<K,V> implements WindowedKTable<K, V> {
 
     @Override
     public Set<K> keySet(ReadOnlyWindowStore store) {
@@ -42,7 +42,7 @@ public class WindowedKTableResource<K,V> implements WindowedKTable<K, V> {
                 KeyValue<Windowed<K>, V> next = all.next();
                 if (query.contains(next.key.key())) {
                     results.add(new Pair(next.key.key(), next.value));
-                    log.info("next Value: {}", next.value);
+                    log.debug("next Value: {}", next.value);
                 }
             }
         } finally {

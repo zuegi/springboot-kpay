@@ -33,7 +33,7 @@ public class AccountProcessor {
          */
 
 
-        KTable<String, AccountBalance> accountBalanceKTable = inflight.groupByKey()
+        inflight.groupByKey()
                 .aggregate(
                         AccountBalance::new,
                         (key, value, aggregate) -> aggregate.handle(key, value),
