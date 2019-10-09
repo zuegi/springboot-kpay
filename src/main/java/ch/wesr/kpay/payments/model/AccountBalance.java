@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * TODO: need validation mechanism to ensure accounts were created correctly = i.e. prevent adhoc account creation
@@ -29,14 +30,14 @@ public class AccountBalance {
     }
 
     private Payment lastPayment;
-    private BigDecimal amount = new BigDecimal(0);
+    private BigDecimal amount = new BigDecimal(0).setScale(2, RoundingMode.CEILING);
 
     public BigDecimal getAmount() {
-        return amount;
+        return amount.setScale(2, RoundingMode.CEILING);
     }
 
     public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+        this.amount = amount.setScale(2, RoundingMode.CEILING);
     }
 
     public AccountBalance handle(String key, Payment value) {
@@ -46,9 +47,9 @@ public class AccountBalance {
         log.debug("handle: {} : {} ", "not-set", value);
 
         if (value.getState() == Payment.State.debit) {
-            this.amount = this.amount.subtract(value.getAmount());
+            this.amount = this.amount.subtract(value.getAmount().setScale(2, RoundingMode.CEILING));
         } else if (value.getState() == Payment.State.credit) {
-            this.amount = this.amount.add(value.getAmount());
+            this.amount = this.amount.add(value.getAmount()).setScale(2, RoundingMode.CEILING);
         } else {
             // report to dead letter queue via exception handler
             throw new RuntimeException("Invalid payment received:" + value);
