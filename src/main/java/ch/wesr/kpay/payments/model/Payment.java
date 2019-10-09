@@ -22,7 +22,7 @@ public class Payment {
     private String from;
     private String to;
     private BigDecimal amount;
-    private int state;
+    private State state;
 
     private long timestamp;
     private long processStartTime;
@@ -33,12 +33,12 @@ public class Payment {
         this.from = from;
         this.to = to;
         this.amount = amount;
-        this.state = state.ordinal();
+        this.state = state;
         this.timestamp = timestamp;
     }
 
     public State getState() {
-        return State.values()[state];
+        return state;
     }
 
     /**
@@ -47,11 +47,11 @@ public class Payment {
      * @param state
      */
     public void setState(State state) {
-        this.state = state.ordinal();
+        this.state = state;
     }
 
     public void setStateAndId(State state) {
-        this.state = state.ordinal();
+        this.state = state;
         if (state == State.credit) {
             id = to;
         } else if (state == State.debit) {
@@ -77,12 +77,6 @@ public class Payment {
 
     public long getElapsedMillis(){
         return System.currentTimeMillis() - this.processStartTime;
-    }
-
-    static public final class Serde extends WrapperSerde<Payment> {
-        public Serde() {
-            super(new JsonSerializer<>(), new JsonDeserializer<>(Payment.class));
-        }
     }
 
 }
