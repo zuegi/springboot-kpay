@@ -19,21 +19,10 @@ import java.util.Random;
 @Component
 public class PaymentsIncomingSource  {
 
-    @Value("${kpay.executors.corePoolSize}")
-    private int corePoolSize;
-
-    @Value("${kpay.executors.initialDelay}")
-    private int initalDelay;
-
-    @Value("${kpay.executors.period}")
-    private int period;
 
     @Autowired
     private PaymentSourceMessagingGateway paymentSourceMessagingGateway;
 
-    public PaymentsIncomingSource(KpayBindings bindings) {
-      //  this.paymentSource = bindings.paymentIncomingOut();
-    }
 
     @Scheduled(fixedRate = 1000, initialDelay = 1000)
     public void paymentProducer() {
