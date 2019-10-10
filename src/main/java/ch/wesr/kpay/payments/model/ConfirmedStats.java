@@ -25,7 +25,7 @@ public class ConfirmedStats {
         if (value.getState() == Payment.State.confirmed) {
             log.debug("Payment.State: {}", value.getState());
             // remove 'complete'd payments
-            this.amount = this.amount.add(value.getAmount().setScale(2, RoundingMode.CEILING));
+            this.amount = this.amount.add(value.getAmount()).setScale(2, RoundingMode.CEILING);
             this.count++;
         } else {
             // log error
@@ -44,7 +44,7 @@ public class ConfirmedStats {
 
     public void add(ConfirmedStats other) {
         this.count += other.getCount();
-        this.amount.add(other.getAmount().setScale(2, RoundingMode.CEILING));
+        this.amount = this.amount.add(other.getAmount()).setScale(2, RoundingMode.CEILING);
     }
 
 

@@ -1,11 +1,9 @@
 package ch.wesr.kpay.payments;
 
-import ch.wesr.kpay.config.KpayBindings;
 import ch.wesr.kpay.payments.model.Payment;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -30,7 +28,7 @@ public class PaymentsIncomingSource  {
         String from = froms.get(new Random().nextInt(froms.size()));
         String to = froms.get(new Random().nextInt(froms.size()));
         String txnId = RandomStringUtils.random(10, true, true);
-        BigDecimal bigDecimal = BigDecimalGenerator.get("10.00", "150.00");
+        BigDecimal bigDecimal = BigDecimalGenerator.get("1.00", "10.00");
 
         Payment payment = new Payment(txnId, "id", from, to, bigDecimal, Payment.State.incoming, System.currentTimeMillis());
         log.info("Sent message: " + payment);

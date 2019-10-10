@@ -24,11 +24,11 @@ public class InflightStats {
         this.timestamp = System.currentTimeMillis();
         if (value.getState() == Payment.State.incoming) {
             // accumulate on 'incoming' payment
-            this.amount = this.amount.add(value.getAmount().setScale(2, RoundingMode.CEILING));
+            this.amount = this.amount.add(value.getAmount()).setScale(2, RoundingMode.CEILING);
             this.count++;
         } else if (value.getState() == Payment.State.complete) {
             // remove 'complete'd payments
-            this.amount = this.amount.subtract(value.getAmount().setScale(2, RoundingMode.CEILING));
+            this.amount = this.amount.subtract(value.getAmount()).setScale(2, RoundingMode.CEILING);
             this.count--;
         }
         return this;
@@ -43,7 +43,7 @@ public class InflightStats {
     }
 
     public void add(InflightStats other) {
-        this.amount.add(other.amount);
+        this.amount = this.amount.add(other.amount).setScale(2, RoundingMode.CEILING);
         this.count += other.count;
     }
 
