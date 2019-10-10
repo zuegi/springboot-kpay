@@ -21,21 +21,9 @@ public class JsonSerdeConfig {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(MapperFeature.DEFAULT_VIEW_INCLUSION, false);
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        objectMapper.configure(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS, false);
-        objectMapper.configure(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS, false);
         objectMapper.enable(JsonGenerator.Feature.WRITE_BIGDECIMAL_AS_PLAIN);
 
         return objectMapper;
-    }
-
-    @Bean
-    @Qualifier("valuePaymentJsonSerde")
-    public JsonSerde valuePaymentJsonSerde(ObjectMapper objectMapper) {
-        JsonSerde jsonSerde = new JsonSerde(objectMapper);
-        Map<String, String> configMap = new HashMap<>();
-        configMap.put("spring.json.value.default.type", "ch.wesr.kpay.payments.model.Payment");
-        jsonSerde.configure(configMap, false);
-        return jsonSerde;
     }
 
     @Bean

@@ -18,6 +18,8 @@ public interface KpayBindings {
     String PAYMENT_COMPLETE_THROUGHPUT = "pcothroughput";
     String PAYMENT_CONFIRMED_OUT = "pconfout";
 
+    String PAYMENT_INCOMING_COMPLETED = "pinccompleted";
+
     public static final String STORE_NAME_INFLIGHT_METRICS = "inflight";
 
     @Output(PAYMENT_INCOMING_OUT)
@@ -25,6 +27,9 @@ public interface KpayBindings {
 
     @Input(PAYMENT_INCOMING)
     KStream<String, Payment> paymentIncoming();
+
+    @Output(PAYMENT_INCOMING_COMPLETED)
+    KStream<String, Payment> paymentIncomingCompleted();
 
     @Output(PAYMENT_INFLIGHT_OUT)
     KStream<String, Payment> paymentInflightOut();

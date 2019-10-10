@@ -50,6 +50,13 @@ public class MetricsController {
         ReadOnlyWindowStore<String, Payment> paymentInflightStore = interactiveQueryService.getQueryableStore(KpayBindings.STORE_NAME_INFLIGHT_METRICS, QueryableStoreTypes.<String, Payment>windowStore());
         List<Pair<String, InflightStats>> inflightStats = this.windowedKTableImpl.get(paymentInflightStore, new ArrayList<>(this.windowedKTableImpl.keySet(paymentInflightStore)));
 
+        inflightStats.sort(new Comparator<Pair<String, InflightStats>>() {
+            @Override
+            public int compare(Pair<String, InflightStats> o1, Pair<String, InflightStats> o2) {
+                return Long.compare(o2.getV().getTimestamp(), o1.getV().getTimestamp());
+            }
+        });
+
         ReadOnlyWindowStore<String, ConfirmedStats> confirmedStore = interactiveQueryService.getQueryableStore(PaymentsConfirmedProcessor.STORE_NAME, QueryableStoreTypes.<String, ConfirmedStats>windowStore());
         List<Pair<String, ConfirmedStats>> confirmedStats = this.windowedKTableImpl.get(confirmedStore, new ArrayList<>(this.windowedKTableImpl.keySet(confirmedStore)));
         confirmedStats.sort(new Comparator<Pair<String, ConfirmedStats>>() {
@@ -79,6 +86,9 @@ public class MetricsController {
         while (confirmedIterator.hasNext()) {
             confirmedStatsValue.add(confirmedIterator.next().getV());
         }
+
+        // FIXME Fake timestamp
+        //inflightStatsValue.setTimestamp(confirmedStatsValue.getTimestamp());
 
         return new Pair<>(inflightStatsValue, confirmedStatsValue);
     }

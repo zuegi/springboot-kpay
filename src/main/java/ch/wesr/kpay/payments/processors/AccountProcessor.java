@@ -7,10 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.KeyValue;
-import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.KeyValueMapper;
-import org.apache.kafka.streams.kstream.Materialized;
-import org.apache.kafka.streams.kstream.Predicate;
+import org.apache.kafka.streams.kstream.*;
 import org.apache.kafka.streams.state.KeyValueStore;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.stream.annotation.Input;
@@ -37,21 +34,25 @@ public class AccountProcessor {
 
     @SuppressWarnings("unchecked")
     @StreamListener
-    @SendTo({KpayBindings.PAYMENT_INFLIGHT_OUT_OUT, KpayBindings.PAYMENT_COMPLETE_OUT})
+    @SendTo({KpayBindings.PAYMENT_INFLIGHT_OUT_OUT, KpayBindings.PAYMENT_COMPLETE_OUT, KpayBindings.PAYMENT_INCOMING_COMPLETED})
     public KStream<String, Payment>[] process(@Input(KpayBindings.PAYMENT_INFLIGHT) KStream<String, Payment> inflight) {
-
+        inflight.foreach((key, value) -> {
+            log.info("key: {}, value: {}", key, value);
+        });
         /*
          * Debit & credit processing
          */
-        inflight.groupByKey()
+        KTable<String, AccountBalance> ktable = inflight.groupByKey()
                 .aggregate(
                         AccountBalance::new,
                         (key, value, aggregate) -> aggregate.handle(key, value),
                         accountStore
                 );
 
+
         Predicate<String, Payment> isCreditRecord =  (key, value) -> value.getState() == Payment.State.credit;
         Predicate<String, Payment> isCompleteRecord =  (key, value) -> value.getState() == Payment.State.complete;
+        Predicate<String, Payment> isCompleteRecordForStats =  (key, value) -> value.getState() == Payment.State.complete;
 
          /*
           * Data flow and state processing
@@ -68,7 +69,7 @@ public class AccountProcessor {
                     }
                     return new KeyValue<>(value.getId(), value);
                 })
-                .branch(isCreditRecord, isCompleteRecord);
+                .branch(isCreditRecord, isCompleteRecord, isCompleteRecordForStats);
 
     }
 }

@@ -47,7 +47,7 @@ public class PaymentsConfirmedProcessor {
             return new KeyValue<>(value.getId(), value);
         });
 
-        complete
+        completeStream
                 .groupBy((key, value) -> Integer.toString(key.hashCode() % 10)) // redistribute to restricted key-set
 //                .groupByKey()
                 .windowedBy(TimeWindows.of(ONE_DAY))
