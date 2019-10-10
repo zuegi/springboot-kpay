@@ -21,7 +21,6 @@ public class PaymentsIncomingSource  {
     @Autowired
     private PaymentSourceMessagingGateway paymentSourceMessagingGateway;
 
-
     @Scheduled(fixedRate = 1000, initialDelay = 1000)
     public void paymentProducer() {
         List<String> froms = Arrays.asList("peter", "ueli", "simon", "carsten", "lars", "phong", "rene");

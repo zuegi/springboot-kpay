@@ -171,13 +171,13 @@ window.chartColors = {
 
 function createPaymentPipelineChart() {
     console.log("Loading createPaymentPipelineChart")
-    var date = moment().subtract(1, 'hour');
-
-    var data = [randomBar(date, 30)];
-    while (data.length < 60) {
-        date = date.clone().add(1, 'minute');
-        data.push(randomBar(date, data[data.length - 1].y));
-    }
+    // var date = moment().subtract(1, 'hour');
+    //
+    // var data = [randomBar(date, 30)];
+    // while (data.length < 60) {
+    //     date = date.clone().add(1, 'minute');
+    //     data.push(randomBar(date, data[data.length - 1].y));
+    // }
 
     var ctx = document.getElementById('paymentPipelineChart').getContext('2d');
     var cfg = {
@@ -201,7 +201,6 @@ function createPaymentPipelineChart() {
                     fill: false,
                     backgroundColor: window.chartColors.yellow,
                     borderColor: window.chartColors.yellow,
-
                     lineTension: 0,
                     borderWidth: 2,
                     cubicInterpolationMode: 'monotone'

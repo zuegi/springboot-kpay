@@ -25,6 +25,9 @@ public class AccountRestController {
 
         ReadOnlyKeyValueStore<String, Payment> paymentStore = interactiveQueryService.getQueryableStore(AccountProcessor.STORE_NAME, QueryableStoreTypes.<String, Payment>keyValueStore());
 
-        return paymentStore.all();
+        if (paymentStore != null) {
+            return paymentStore.all();
+        }
+        return null;
     }
 }

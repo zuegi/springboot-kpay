@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -48,10 +50,22 @@ public class MetricsController {
         ReadOnlyWindowStore<String, Payment> paymentInflightStore = interactiveQueryService.getQueryableStore(KpayBindings.STORE_NAME_INFLIGHT_METRICS, QueryableStoreTypes.<String, Payment>windowStore());
         List<Pair<String, InflightStats>> inflightStats = this.windowedKTableImpl.get(paymentInflightStore, new ArrayList<>(this.windowedKTableImpl.keySet(paymentInflightStore)));
 
-        ReadOnlyWindowStore<String, Payment> confirmedStore = interactiveQueryService.getQueryableStore(PaymentsConfirmedProcessor.STORE_NAME, QueryableStoreTypes.<String, Payment>windowStore());
+        ReadOnlyWindowStore<String, ConfirmedStats> confirmedStore = interactiveQueryService.getQueryableStore(PaymentsConfirmedProcessor.STORE_NAME, QueryableStoreTypes.<String, ConfirmedStats>windowStore());
         List<Pair<String, ConfirmedStats>> confirmedStats = this.windowedKTableImpl.get(confirmedStore, new ArrayList<>(this.windowedKTableImpl.keySet(confirmedStore)));
+        confirmedStats.sort(new Comparator<Pair<String, ConfirmedStats>>() {
+            @Override
+            public int compare(Pair<String, ConfirmedStats> o1, Pair<String, ConfirmedStats> o2) {
+                return Long.compare(o2.getV().getTimestamp(), o1.getV().getTimestamp());
+            }
+        });
 
-        if (inflightStats.size() == 0 || confirmedStats.size() == 0) return new Pair<>(new InflightStats(), new ConfirmedStats());
+        if (inflightStats.size() == 0 || confirmedStats.size() == 0) {
+            InflightStats inflightStats1 = new InflightStats();
+            inflightStats1.setTimestamp(System.currentTimeMillis());
+            ConfirmedStats confirmedStats1 = new ConfirmedStats();
+            confirmedStats1.setTimestamp(System.currentTimeMillis());
+            return new Pair<>(inflightStats1, confirmedStats1);
+        }
 
         Iterator<Pair<String, InflightStats>> iterator = inflightStats.iterator();
         InflightStats

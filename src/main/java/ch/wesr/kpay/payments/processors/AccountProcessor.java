@@ -43,8 +43,6 @@ public class AccountProcessor {
         /*
          * Debit & credit processing
          */
-
-
         inflight.groupByKey()
                 .aggregate(
                         AccountBalance::new,
@@ -58,8 +56,6 @@ public class AccountProcessor {
          /*
           * Data flow and state processing
           */
-
-
        return inflight
                 .map((KeyValueMapper<String, Payment, KeyValue<String, Payment>>) (key, value) -> {
                     if (value.getState() == Payment.State.debit) {
@@ -73,9 +69,6 @@ public class AccountProcessor {
                     return new KeyValue<>(value.getId(), value);
                 })
                 .branch(isCreditRecord, isCompleteRecord);
-
-       /* branch[0].to(KpayBindings.PAYMENT_INFLIGHT_OUT_OUT);
-        branch[1].to(KpayBindings.PAYMENT_COMPLETE_OUT);*/
 
     }
 }
