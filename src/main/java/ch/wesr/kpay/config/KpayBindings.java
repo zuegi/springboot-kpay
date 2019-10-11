@@ -10,6 +10,7 @@ public interface KpayBindings {
 
     String PAYMENT_INCOMING_OUT = "pincout";
     String PAYMENT_INCOMING = "pinc";
+    String PAYMENT_INCOMING_COMPLETED = "pinccompleted";
     String PAYMENT_INFLIGHT_OUT = "pinfout";
     String PAYMENT_INFLIGHT_OUT_OUT = "pinfoutout";
     String PAYMENT_INFLIGHT = "pinf";
@@ -18,7 +19,6 @@ public interface KpayBindings {
     String PAYMENT_COMPLETE_THROUGHPUT = "pcothroughput";
     String PAYMENT_CONFIRMED_OUT = "pconfout";
 
-    String PAYMENT_INCOMING_COMPLETED = "pinccompleted";
 
     public static final String STORE_NAME_INFLIGHT_METRICS = "inflight";
 

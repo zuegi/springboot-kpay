@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@SuppressWarnings("unchecked")
 public class PaymentsInFlightProcessor {
 
 
@@ -39,7 +40,7 @@ public class PaymentsInFlightProcessor {
     @StreamListener
     @SendTo(KpayBindings.PAYMENT_INFLIGHT_OUT)
     public KStream<String, Payment> process(@Input (KpayBindings.PAYMENT_INCOMING) KStream<String, Payment> paymentKStream) {
-        paymentKStream.foreach((key, value) -> log.info("[Inflight Processor] key: {}, value {}", key, value));
+//        paymentKStream.foreach((key, value) -> log.info("[Inflight Processor] key: {}, value {}", key, value));
         paymentKStream
                 .groupBy((key, value) -> Integer.toString(key.hashCode() % 10))// reduce event key space for cross event aggregation
 //               .groupByKey()

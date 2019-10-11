@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@SuppressWarnings("unchecked")
 public class PaymentsConfirmedProcessor {
 
     public static final String STORE_NAME = "confirmed";

@@ -16,8 +16,11 @@ import org.springframework.kafka.support.serializer.JsonSerde;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Component;
 
+import java.io.UncheckedIOException;
+
 @Slf4j
 @Component
+@SuppressWarnings("unchecked")
 public class AccountProcessor {
 
     public static final String STORE_NAME = "account";
@@ -32,13 +35,12 @@ public class AccountProcessor {
                 valueJsonSerde);
     }
 
-    @SuppressWarnings("unchecked")
     @StreamListener
     @SendTo({KpayBindings.PAYMENT_INFLIGHT_OUT_OUT, KpayBindings.PAYMENT_COMPLETE_OUT, KpayBindings.PAYMENT_INCOMING_COMPLETED})
     public KStream<String, Payment>[] process(@Input(KpayBindings.PAYMENT_INFLIGHT) KStream<String, Payment> inflight) {
-        inflight.foreach((key, value) -> {
+       /* inflight.foreach((key, value) -> {
             log.info("key: {}, value: {}", key, value);
-        });
+        });*/
         /*
          * Debit & credit processing
          */
@@ -50,11 +52,14 @@ public class AccountProcessor {
                 );
 
 
+
+
         Predicate<String, Payment> isCreditRecord =  (key, value) -> value.getState() == Payment.State.credit;
         Predicate<String, Payment> isCompleteRecord =  (key, value) -> value.getState() == Payment.State.complete;
-        Predicate<String, Payment> isCompleteRecordForStats =  (key, value) -> value.getState() == Payment.State.complete;
+        Predicate<String, Payment> isCompleteRecordForStats =  (key, value) ->  value.getFrom().equals("rene");
 
-         /*
+
+        /*
           * Data flow and state processing
           */
        return inflight

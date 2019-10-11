@@ -22,7 +22,7 @@ public class PaymentsIncomingSource  {
     @Autowired
     private PaymentSourceMessagingGateway paymentSourceMessagingGateway;
 
-    @Scheduled(fixedRate = 100, initialDelay = 1000)
+    @Scheduled(fixedRate = 100, initialDelay = 5000)
     public void paymentProducer() {
         List<String> froms = Arrays.asList("peter", "ueli", "simon", "carsten", "lars", "phong", "rene");
         String from = froms.get(new Random().nextInt(froms.size()));
