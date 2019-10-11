@@ -49,6 +49,7 @@ public class PaymentsConfirmedProcessor {
     @StreamListener
     @SendTo(KpayBindings.PAYMENT_CONFIRMED_OUT)
     public KStream<String, Payment> process(@Input(KpayBindings.PAYMENT_COMPLETE) KStream<String, Payment> complete) {
+        complete.foreach((key, value) -> log.info("Processing complete topic => Complete key {}", key));
 
         complete
                 .groupBy((key, value) -> Integer.toString(key.hashCode() % 10))// reduce event key space for cross event aggregation
