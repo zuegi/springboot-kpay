@@ -30,7 +30,9 @@ public class PaymentsIncomingSource  {
         String to = dynamicsTos.get(new Random().nextInt(dynamicsTos.size()));
         BigDecimal bigDecimal = BigDecimalGenerator.get("5.00", "30.00");
 
-        Payment payment = new Payment("pay-" + System.currentTimeMillis(), System.currentTimeMillis() + "", from, to, new BigDecimal(Math.round((Math.random() * 100.0)*100.0)/100.0).setScale(2, RoundingMode.CEILING), Payment.State.incoming, System.currentTimeMillis() );
+        long currentTimeMillis = System.currentTimeMillis();
+        String txnId = "pay-" + currentTimeMillis;
+        Payment payment = new Payment(txnId, txnId, from, to, new BigDecimal(Math.round((Math.random() * 100.0)*100.0)/100.0).setScale(2, RoundingMode.CEILING), Payment.State.incoming, currentTimeMillis);
         log.info("Sent message: " + payment);
         this.paymentSourceMessagingGateway.publishPayment(payment, payment.getTxnId().getBytes());
     }

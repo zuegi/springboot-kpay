@@ -47,7 +47,7 @@ public class MetricsController {
     @GetMapping("pipeline")
     public Pair<InflightStats, ConfirmedStats> pipelineStats() {
 
-        ReadOnlyWindowStore<String, Payment> paymentInflightStore = interactiveQueryService.getQueryableStore(KpayBindings.STORE_NAME_INFLIGHT_METRICS, QueryableStoreTypes.<String, Payment>windowStore());
+        ReadOnlyWindowStore<String, InflightStats> paymentInflightStore = interactiveQueryService.getQueryableStore(KpayBindings.STORE_NAME_INFLIGHT_METRICS, QueryableStoreTypes.<String, InflightStats>windowStore());
         ReadOnlyWindowStore<String, ConfirmedStats> confirmedStore = interactiveQueryService.getQueryableStore(PaymentsConfirmedProcessor.STORE_NAME, QueryableStoreTypes.<String, ConfirmedStats>windowStore());
         if (paymentInflightStore != null && confirmedStore != null) {
 
