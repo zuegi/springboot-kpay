@@ -1,6 +1,7 @@
 var chart;
 var paymentPipelineChart;
 var accountTable;
+var paymentsRunning;
 
 $(document).ready(function () {
     accountTable = $('#accountTable').DataTable({
@@ -23,10 +24,41 @@ $(document).ready(function () {
         ]
     });
 
+    // $('#pausePayments').prop('disabled', paymentsRunning);
+
+    /* Start Payments Button*/
+    $('#startPayments').click(function() {
+        $.get({
+            url: "/api/control/paymentProducer/start",
+            success: function (e) {
+                $('#pausePayments').prop('disabled', false);
+                $('#startPayments').prop('disabled', true);
+            },
+            error: function(e) {
+
+            }
+        });
+    });
+
+   $('#pausePayments').click(function() {
+        $.get({
+            url: "/api/control/paymentProducer/stop",
+            success: function (e) {
+                $('#startPayments').prop('disabled', false);
+                $('#pausePayments').prop('disabled', true);
+            },
+            error: function(e) {
+
+            }
+        });
+    });
+
     createStuff();
 
 
 });
+
+
 
 function createStuff() {
     createLatencyChart();
@@ -35,6 +67,7 @@ function createStuff() {
     refreshLatencyChart();
     refreshPaymentPipelineChart();
 }
+
 
 function refreshLatencyChart() {
     $.get({
