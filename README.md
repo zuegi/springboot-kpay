@@ -2,6 +2,10 @@
 
 There is still a lot to do, but try it out and improve
 
+## Process
+
+![alt text](SpringBootKpay.png "Process")
+
 ## Run within your IDE
 
 > Run java class  ch.wesr.kpay.KpayApplication 
