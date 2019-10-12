@@ -14,22 +14,20 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class PaymentIncomingProcessor {
-
+public class PaymentDebitProcessor {
 
     @StreamListener
-    @SendTo(KpayBindings.PAYMENT_INFLIGHT_SOURCE)
-    public KStream<String, Payment> process(@Input(KpayBindings.PAYMENT_INCOMING_INPUT) KStream<String, Payment> paymentIncomingStream) {
+    @SendTo(KpayBindings.PAYMENT_INFLIGHT_DEBIT_OUTPUT)
+    public KStream<String, Payment> process(@Input(KpayBindings.PAYMENT_INFLIGHT_DEBIT_INPUT) KStream<String, Payment> paymentDebitStream) {
 
+        // TODO AccountBalance update
 
-        return paymentIncomingStream
+        return paymentDebitStream
+                .filter((key, value) -> value.getState() == Payment.State.debit)
                 .map((KeyValueMapper<String, Payment, KeyValue<String, Payment>>) (key, value) -> {
-                    if (value.getState() == Payment.State.incoming) {
-                        value.setStateAndId(Payment.State.debit);
-                    }
+                    value.setStateAndId(Payment.State.credit);
                     return new KeyValue<>(value.getId(), value);
                 });
-
 
     }
 }

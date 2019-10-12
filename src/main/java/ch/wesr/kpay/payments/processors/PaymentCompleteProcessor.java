@@ -1,6 +1,5 @@
 package ch.wesr.kpay.payments.processors;
 
-
 import ch.wesr.kpay.config.KpayBindings;
 import ch.wesr.kpay.payments.model.Payment;
 import lombok.extern.slf4j.Slf4j;
@@ -14,22 +13,18 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class PaymentIncomingProcessor {
-
+public class PaymentCompleteProcessor {
 
     @StreamListener
-    @SendTo(KpayBindings.PAYMENT_INFLIGHT_SOURCE)
-    public KStream<String, Payment> process(@Input(KpayBindings.PAYMENT_INCOMING_INPUT) KStream<String, Payment> paymentIncomingStream) {
+    @SendTo(KpayBindings.PAYMENT_COMPLETE_OUTPUT)
+    public KStream<String, Payment> process(@Input(KpayBindings.PAYMENT_COMPLETE_INPUT) KStream<String, Payment> paymentCompleteStream) {
 
-
-        return paymentIncomingStream
+        return paymentCompleteStream
+                .filter((key, value) -> value.getState() == Payment.State.complete)
                 .map((KeyValueMapper<String, Payment, KeyValue<String, Payment>>) (key, value) -> {
-                    if (value.getState() == Payment.State.incoming) {
-                        value.setStateAndId(Payment.State.debit);
-                    }
+                    value.setStateAndId(Payment.State.confirmed);
                     return new KeyValue<>(value.getId(), value);
                 });
-
 
     }
 }

@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 import java.io.UncheckedIOException;
 
 @Slf4j
-@Component
+//@Component
 @SuppressWarnings("unchecked")
 public class AccountProcessor {
 
@@ -35,9 +35,9 @@ public class AccountProcessor {
                 valueJsonSerde);
     }
 
-    @StreamListener
-    @SendTo({KpayBindings.PAYMENT_INFLIGHT_OUT_OUT, KpayBindings.PAYMENT_COMPLETE_OUT, KpayBindings.PAYMENT_INCOMING_COMPLETED})
-    public KStream<String, Payment>[] process(@Input(KpayBindings.PAYMENT_INFLIGHT) KStream<String, Payment> inflight) {
+//    @StreamListener
+//    @SendTo({KpayBindings.PAYMENT_INFLIGHT_OUT_OUT, KpayBindings.PAYMENT_COMPLETE_OUT, KpayBindings.PAYMENT_INCOMING_COMPLETED})
+    public KStream<String, Payment>[] process(/*@Input(KpayBindings.PAYMENT_INFLIGHT)*/ KStream<String, Payment> inflight) {
        /* inflight.foreach((key, value) -> {
             log.info("key: {}, value: {}", key, value);
         });*/

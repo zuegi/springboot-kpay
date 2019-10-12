@@ -11,6 +11,12 @@ public interface KpayBindings {
     String PAYMENT_INCOMING_SOURCE = "paymentIncomingSource";
     String PAYMENT_INCOMING_INPUT = "paymentIncomingInput";
     String PAYMENT_INFLIGHT_SOURCE = "paymentInflight";
+    String PAYMENT_INFLIGHT_DEBIT_INPUT = "paymentInflightDebitInput";
+    String PAYMENT_INFLIGHT_DEBIT_OUTPUT = "paymentInflightDebitOutput";
+    String PAYMENT_INFLIGHT_CREDIT_INPUT = "paymentInflightCreditInput";
+    String PAYMENT_INFLIGHT_CREDIT_OUTPUT = "paymentInflightCreditOutput";
+    String PAYMENT_COMPLETE_INPUT = "paymentCompleteInput";
+    String PAYMENT_COMPLETE_OUTPUT = "paymentCompleteOutput";
 
 
     @Output(PAYMENT_INCOMING_SOURCE)
@@ -22,6 +28,26 @@ public interface KpayBindings {
     @Output(PAYMENT_INFLIGHT_SOURCE)
     KStream<String, Payment> paymentInflightSource();
 
+    @Input(PAYMENT_INFLIGHT_DEBIT_INPUT)
+    KStream<String, Payment> paymentInflightDebitInput();
+
+    @Output(PAYMENT_INFLIGHT_DEBIT_OUTPUT)
+    KStream<String, Payment> paymentInflightDebitOutput();
+
+    @Input(PAYMENT_INFLIGHT_CREDIT_INPUT)
+    KStream<String, Payment> paymentInflightCreditInput();
+
+    @Output(PAYMENT_INFLIGHT_CREDIT_OUTPUT)
+    KStream<String, Payment> paymentInflightCreditOutput();
+
+    @Input(PAYMENT_COMPLETE_INPUT)
+    KStream<String, Payment> paymentCompleteInput();
+
+    @Output(PAYMENT_COMPLETE_OUTPUT)
+    KStream<String, Payment> paymentCompleteOutput();
+/*
+* *************************************************************************************
+*/
     // below to be refactored or deleted
 
     String PAYMENT_INCOMING_OUT = "pincout";
@@ -44,20 +70,20 @@ public interface KpayBindings {
     @Input(PAYMENT_INCOMING)
     KStream<String, Payment> paymentIncoming();
 
-    @Output(PAYMENT_INCOMING_COMPLETED)
-    KStream<String, Payment> paymentIncomingCompleted();
+//    @Output(PAYMENT_INCOMING_COMPLETED)
+//    KStream<String, Payment> paymentIncomingCompleted();
 
     @Output(PAYMENT_INFLIGHT_OUT)
     KStream<String, Payment> paymentInflightOut();
 
-    @Input(PAYMENT_INFLIGHT)
-    KStream<String, Payment> paymentInflight();
+//    @Input(PAYMENT_INFLIGHT)
+//    KStream<String, Payment> paymentInflight();
 
-    @Output(PAYMENT_INFLIGHT_OUT_OUT)
-    KStream<String, Payment> paymentInflightOutOut();
+//    @Output(PAYMENT_INFLIGHT_OUT_OUT)
+//    KStream<String, Payment> paymentInflightOutOut();
 
-    @Output(PAYMENT_COMPLETE_OUT)
-    KStream<String, Payment> paymentCompleteOut();
+//    @Output(PAYMENT_COMPLETE_OUT)
+//    KStream<String, Payment> paymentCompleteOut();
 
     @Input(PAYMENT_COMPLETE)
     KStream<String, Payment> paymentComplete();
