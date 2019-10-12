@@ -8,7 +8,11 @@ import org.springframework.messaging.MessageChannel;
 
 public interface KpayBindings {
 
-    String PAYMENT_INCOMING_SOURCE = "paymentIncomingSource";
+    String ACCOUNT_BALANCE_STORE_NAME = "accountBalance";
+    String PAYMENT_THROUGHPUT_STORE_NAME = "paymentThroughput";
+
+
+    String PAYMENT_PRODUCER_OUTPUT = "paymentProducerOutput";
     String PAYMENT_INCOMING_INPUT = "paymentIncomingInput";
     String PAYMENT_INFLIGHT_SOURCE = "paymentInflight";
     String PAYMENT_INFLIGHT_DEBIT_INPUT = "paymentInflightDebitInput";
@@ -17,10 +21,11 @@ public interface KpayBindings {
     String PAYMENT_INFLIGHT_CREDIT_OUTPUT = "paymentInflightCreditOutput";
     String PAYMENT_COMPLETE_INPUT = "paymentCompleteInput";
     String PAYMENT_COMPLETE_OUTPUT = "paymentCompleteOutput";
+    String PAYMENT_THROUGHPUT_INPUT = "paymentThroughputInput";
 
 
-    @Output(PAYMENT_INCOMING_SOURCE)
-    MessageChannel paymentIncomingSource();
+    @Output(PAYMENT_PRODUCER_OUTPUT)
+    MessageChannel paymentProducerOutput();
 
     @Input(PAYMENT_INCOMING_INPUT)
     KStream<String, Payment> paymentIncomingInput();
@@ -45,7 +50,11 @@ public interface KpayBindings {
 
     @Output(PAYMENT_COMPLETE_OUTPUT)
     KStream<String, Payment> paymentCompleteOutput();
-/*
+
+    @Input(PAYMENT_THROUGHPUT_INPUT)
+    KStream<String, Payment> paymentThroughputInput();
+
+    /*
 * *************************************************************************************
 */
     // below to be refactored or deleted

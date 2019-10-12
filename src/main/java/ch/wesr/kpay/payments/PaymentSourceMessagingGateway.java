@@ -11,6 +11,6 @@ import org.springframework.messaging.handler.annotation.Payload;
 @MessagingGateway
 public interface PaymentSourceMessagingGateway {
 
-    @Gateway(requestChannel = KpayBindings.PAYMENT_INCOMING_SOURCE)
+    @Gateway(requestChannel = KpayBindings.PAYMENT_PRODUCER_OUTPUT)
     public void publishPayment(@Payload Payment payment, @Header(KafkaHeaders.MESSAGE_KEY) byte[] key);
 }

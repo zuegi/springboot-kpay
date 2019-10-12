@@ -31,14 +31,15 @@ public class PaymentThroughputProcessor {
     private final Materialized<String, ThroughputStats, WindowStore<Bytes, byte[]>> completeWindowStore;
 
     public PaymentThroughputProcessor(@Qualifier("valueThroughputsStatsJsonSerde") JsonSerde valueThroughputsStatsJsonSerde) {
-        this.completeStore = Materialized.as("throughput");
+        this.completeStore = Materialized.as(KpayBindings.PAYMENT_THROUGHPUT_STORE_NAME);
         this.completeWindowStore = completeStore.withKeySerde(new Serdes.StringSerde()).withValueSerde(valueThroughputsStatsJsonSerde);
     }
 
     @StreamListener
-    public void process(@Input(KpayBindings.PAYMENT_COMPLETE_THROUGHPUT) KStream<String, Payment> complete) {
+    public void process(@Input(KpayBindings.PAYMENT_THROUGHPUT_INPUT) KStream<String, Payment> complete) {
         log.info("complete: " + complete);
         statsKTable = complete
+                .filter((key, value) -> value.getState() == Payment.State.complete)
                 .groupBy((key, value) -> "all-payments") // forces a repartition
 //                .groupByKey()
                 .windowedBy(TimeWindows.of(ONE_MINUTE))

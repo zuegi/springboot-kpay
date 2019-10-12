@@ -27,27 +27,27 @@ $(document).ready(function () {
     // $('#pausePayments').prop('disabled', paymentsRunning);
 
     /* Start Payments Button*/
-    $('#startPayments').click(function() {
+    $('#startPayments').click(function () {
         $.get({
             url: "/api/control/paymentProducer/start",
             success: function (e) {
-                $('#pausePayments').prop('disabled', false);
-                $('#startPayments').prop('disabled', true);
+                $('#pausePayments').prop('disabled', !isPaymentRunning());
+                $('#startPayments').prop('disabled', isPaymentRunning());
             },
-            error: function(e) {
+            error: function (e) {
 
             }
         });
     });
 
-   $('#pausePayments').click(function() {
+    $('#pausePayments').click(function () {
         $.get({
             url: "/api/control/paymentProducer/stop",
             success: function (e) {
-                $('#startPayments').prop('disabled', false);
-                $('#pausePayments').prop('disabled', true);
+                $('#startPayments').prop('disabled', !isPaymentRunning());
+                $('#pausePayments').prop('disabled', isPaymentRunning());
             },
-            error: function(e) {
+            error: function (e) {
 
             }
         });
@@ -59,7 +59,6 @@ $(document).ready(function () {
 });
 
 
-
 function createStuff() {
     createLatencyChart();
     createPaymentPipelineChart();
@@ -68,6 +67,15 @@ function createStuff() {
     refreshPaymentPipelineChart();
 }
 
+function isPaymentRunning() {
+    return $.get({
+        url: "/api/control/paymentProducer/running",
+        success: function (e) {
+            console.log('isPaymentRunning', e);
+            return e;
+        }
+    });
+}
 
 function refreshLatencyChart() {
     $.get({
@@ -99,7 +107,6 @@ function refreshLatencyChart() {
         }
     })
 }
-
 
 
 function createLatencyChart() {
@@ -138,7 +145,7 @@ function createLatencyChart() {
                     lineTension: 0,
                     borderWidth: 2,
                     cubicInterpolationMode: 'monotone'
-                },{
+                }, {
                     label: 'Max latency (ms)',
                     data: [],
                     type: 'line',
@@ -149,7 +156,7 @@ function createLatencyChart() {
                     lineTension: 0,
                     borderWidth: 2,
                     cubicInterpolationMode: 'monotone'
-                },{
+                }, {
                     label: 'Min latency (ms)',
                     data: [],
                     type: 'line',
@@ -237,7 +244,7 @@ function createPaymentPipelineChart() {
                     lineTension: 0,
                     borderWidth: 2,
                     cubicInterpolationMode: 'monotone'
-                },{
+                }, {
                     label: 'Confirmed Count',
                     data: [],
                     type: 'line',
@@ -248,7 +255,7 @@ function createPaymentPipelineChart() {
                     lineTension: 0,
                     borderWidth: 2,
                     cubicInterpolationMode: 'monotone'
-                },{
+                }, {
                     label: 'Confirmed $',
                     data: [],
                     type: 'line',
@@ -309,7 +316,7 @@ function refreshPaymentPipelineChart() {
     })
 }
 
-setInterval(function(){
+setInterval(function () {
     refreshLatencyChart();
     refreshPaymentPipelineChart();
     accountTable.ajax.reload();
