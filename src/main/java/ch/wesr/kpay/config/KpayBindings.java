@@ -8,6 +8,22 @@ import org.springframework.messaging.MessageChannel;
 
 public interface KpayBindings {
 
+    String PAYMENT_INCOMING_SOURCE = "paymentIncomingSource";
+    String PAYMENT_INCOMING_INPUT = "paymentIncomingInput";
+    String PAYMENT_INFLIGHT_SOURCE = "paymentInflight";
+
+
+    @Output(PAYMENT_INCOMING_SOURCE)
+    MessageChannel paymentIncomingSource();
+
+    @Input(PAYMENT_INCOMING_INPUT)
+    KStream<String, Payment> paymentIncomingInput();
+
+    @Output(PAYMENT_INFLIGHT_SOURCE)
+    KStream<String, Payment> paymentInflightSource();
+
+    // below to be refactored or deleted
+
     String PAYMENT_INCOMING_OUT = "pincout";
     String PAYMENT_INCOMING = "pinc";
     String PAYMENT_INCOMING_COMPLETED = "pinccompleted";
