@@ -320,8 +320,8 @@ function refreshPaymentPipelineChart() {
     })
 }
 
-// setInterval(function () {
-//     refreshLatencyChart();
-//     refreshPaymentPipelineChart();
-//     accountTable.ajax.reload();
-// }, 5000);
+setInterval(function () {
+    refreshLatencyChart();
+    refreshPaymentPipelineChart();
+    accountTable.ajax.reload();
+}, 5000);
