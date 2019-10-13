@@ -31,7 +31,7 @@ public class PaymentThroughputProcessor {
     private final Materialized<String, ThroughputStats, WindowStore<Bytes, byte[]>> completeWindowStore;
 
     public PaymentThroughputProcessor(@Qualifier("valueThroughputsStatsJsonSerde") JsonSerde valueThroughputsStatsJsonSerde) {
-        this.completeStore = Materialized.as(KpayBindings.PAYMENT_THROUGHPUT_STORE_NAME);
+        this.completeStore = Materialized.as(KpayBindings.PAYMENT_THROUGHPUT_STORE);
         this.completeWindowStore = completeStore.withKeySerde(new Serdes.StringSerde()).withValueSerde(valueThroughputsStatsJsonSerde);
     }
 
@@ -41,7 +41,6 @@ public class PaymentThroughputProcessor {
         statsKTable = complete
                 .filter((key, value) -> value.getState() == Payment.State.complete)
                 .groupBy((key, value) -> "all-payments") // forces a repartition
-//                .groupByKey()
                 .windowedBy(TimeWindows.of(ONE_MINUTE))
                 .aggregate(
                         ThroughputStats::new,

@@ -28,14 +28,14 @@ public class PaymentDebitProcessor {
     private final Materialized<String, AccountBalance, KeyValueStore<Bytes, byte[]>> accountStore;
 
     public PaymentDebitProcessor(@Qualifier("valueAccountBalanceJsonSerde") JsonSerde valueJsonSerde) {
-        this.account = Materialized.as(KpayBindings.ACCOUNT_BALANCE_STORE_NAME);
+        this.account = Materialized.as(KpayBindings.ACCOUNT_BALANCE_STORE);
         this.accountStore = account.withKeySerde(new Serdes.StringSerde()).withValueSerde(
                 valueJsonSerde);
     }
 
     @StreamListener
-    @SendTo(KpayBindings.PAYMENT_INFLIGHT_DEBIT_OUTPUT)
-    public KStream<String, Payment> process(@Input(KpayBindings.PAYMENT_INFLIGHT_DEBIT_INPUT) KStream<String, Payment> paymentDebitStream) {
+    @SendTo(KpayBindings.PAYMENT_DEBIT_OUTPUT)
+    public KStream<String, Payment> process(@Input(KpayBindings.PAYMENT_DEBIT_INPUT) KStream<String, Payment> paymentDebitStream) {
 
         /*
          * Debit & credit processing

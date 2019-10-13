@@ -18,7 +18,7 @@ public class PaymentIncomingProcessor {
 
 
     @StreamListener
-    @SendTo(KpayBindings.PAYMENT_INFLIGHT_SOURCE)
+    @SendTo(KpayBindings.PAYMENT_INCOMING_OUTPUT)
     public KStream<String, Payment> process(@Input(KpayBindings.PAYMENT_INCOMING_INPUT) KStream<String, Payment> paymentIncomingStream) {
 
 

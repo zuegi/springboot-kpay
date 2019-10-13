@@ -6,7 +6,6 @@ import ch.wesr.kpay.metrics.model.ThroughputStats;
 import ch.wesr.kpay.metrics.processors.PaymentThroughputProcessor;
 import ch.wesr.kpay.payments.model.ConfirmedStats;
 import ch.wesr.kpay.payments.model.InflightStats;
-import ch.wesr.kpay.payments.model.Payment;
 import ch.wesr.kpay.payments.processors.PaymentsConfirmedProcessor;
 import ch.wesr.kpay.util.Pair;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -47,8 +45,8 @@ public class MetricsController {
     @GetMapping("pipeline")
     public Pair<InflightStats, ConfirmedStats> pipelineStats() {
 
-        ReadOnlyWindowStore<String, InflightStats> paymentInflightStore = interactiveQueryService.getQueryableStore(KpayBindings.STORE_NAME_INFLIGHT_METRICS, QueryableStoreTypes.<String, InflightStats>windowStore());
-        ReadOnlyWindowStore<String, ConfirmedStats> confirmedStore = interactiveQueryService.getQueryableStore(PaymentsConfirmedProcessor.STORE_NAME, QueryableStoreTypes.<String, ConfirmedStats>windowStore());
+        ReadOnlyWindowStore<String, InflightStats> paymentInflightStore = interactiveQueryService.getQueryableStore(KpayBindings.PAYMENT_INFLIGHT_STORE, QueryableStoreTypes.<String, InflightStats>windowStore());
+        ReadOnlyWindowStore<String, ConfirmedStats> confirmedStore = interactiveQueryService.getQueryableStore(KpayBindings.PAYMENT_CONFIRMED_STORE, QueryableStoreTypes.<String, ConfirmedStats>windowStore());
         if (paymentInflightStore != null && confirmedStore != null) {
 
             List<Pair<String, InflightStats>> inflightStats = this.windowedKTableImpl.get(paymentInflightStore, new ArrayList<>(this.windowedKTableImpl.keySet(paymentInflightStore)));

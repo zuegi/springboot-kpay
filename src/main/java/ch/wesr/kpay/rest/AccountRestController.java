@@ -23,7 +23,7 @@ public class AccountRestController {
     @GetMapping("listAccounts")
     public KeyValueIterator<String, Payment> listAccounts(){
 
-        ReadOnlyKeyValueStore<String, Payment> paymentStore = interactiveQueryService.getQueryableStore(KpayBindings.ACCOUNT_BALANCE_STORE_NAME, QueryableStoreTypes.<String, Payment>keyValueStore());
+        ReadOnlyKeyValueStore<String, Payment> paymentStore = interactiveQueryService.getQueryableStore(KpayBindings.ACCOUNT_BALANCE_STORE, QueryableStoreTypes.<String, Payment>keyValueStore());
 
         if (paymentStore != null) {
             return paymentStore.all();
