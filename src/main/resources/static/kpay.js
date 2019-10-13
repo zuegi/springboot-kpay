@@ -1,9 +1,9 @@
 var chart;
 var paymentPipelineChart;
 var accountTable;
-var paymentsRunning;
 
 $(document).ready(function () {
+
     accountTable = $('#accountTable').DataTable({
         ajax: {
             url: 'http://localhost:8080/api/listAccounts',
@@ -24,33 +24,37 @@ $(document).ready(function () {
         ]
     });
 
-    // $('#pausePayments').prop('disabled', paymentsRunning);
+    if(isPaymentRunningFunc()) {
+        $('#startPayments').prop('disabled', true);
+        $('#pausePayments').prop('disabled', false);
+    } else {
+        $('#startPayments').prop('disabled', false);
+        $('#pausePayments').prop('disabled', true);
+    }
 
     /* Start Payments Button*/
     $('#startPayments').click(function () {
-        $.get({
-            url: "/api/control/paymentProducer/start",
-            success: function (e) {
-                $('#pausePayments').prop('disabled', !isPaymentRunning());
-                $('#startPayments').prop('disabled', isPaymentRunning());
-            },
-            error: function (e) {
-
-            }
-        });
+        if(!isPaymentRunningFunc()) {
+            $.get({
+                url: "/api/control/paymentProducer/start",
+                success: function (e) {
+                    $('#startPayments').prop('disabled', true);
+                    $('#pausePayments').prop('disabled', false);
+                }
+            });
+        }
     });
 
     $('#pausePayments').click(function () {
-        $.get({
-            url: "/api/control/paymentProducer/stop",
-            success: function (e) {
-                $('#startPayments').prop('disabled', !isPaymentRunning());
-                $('#pausePayments').prop('disabled', isPaymentRunning());
-            },
-            error: function (e) {
-
-            }
-        });
+        if(isPaymentRunningFunc()) {
+            $.get({
+                url: "/api/control/paymentProducer/stop",
+                success: function (e) {
+                    $('#startPayments').prop('disabled', false );
+                    $('#pausePayments').prop('disabled', true);
+                }
+            });
+        }
     });
 
     createStuff();
@@ -65,23 +69,26 @@ function createStuff() {
 
     refreshLatencyChart();
     refreshPaymentPipelineChart();
+    isPaymentRunningFunc();
+
 }
 
-function isPaymentRunning() {
-    return $.get({
-        url: "/api/control/paymentProducer/running",
-        success: function (e) {
-            console.log('isPaymentRunning', e);
-            return e;
-        }
+function isPaymentRunningFunc() {
+    var result;
+    $.get({
+        url: '/api/control/paymentProducer/running',
+        success: function(data) {
+            result = data;
+        },
+        async:false
     });
+    return result;
 }
 
 function refreshLatencyChart() {
     $.get({
         url: "/api/metrics/throughput",
         success: function (e) {
-            console.log(e)
             var totalPayments = new Object();
             totalPayments.y = e.totalPayments;
             totalPayments.t = e.timestamp;
@@ -110,7 +117,6 @@ function refreshLatencyChart() {
 
 
 function createLatencyChart() {
-    console.log("Loading createLatencyChart")
     var date = moment().subtract(1, 'hour');
 
     var data = [randomBar(date, 30)];
@@ -210,7 +216,6 @@ window.chartColors = {
 };
 
 function createPaymentPipelineChart() {
-    console.log("Loading createPaymentPipelineChart")
     var date = moment().subtract(1, 'hour');
 
     var data = [randomBar(date, 30)];
@@ -289,7 +294,6 @@ function refreshPaymentPipelineChart() {
     $.get({
         url: "/api/metrics/pipeline",
         success: function (e) {
-            console.log(e)
             var inflightCount = new Object();
             inflightCount.y = e.k.count;
             inflightCount.t = e.k.timestamp;
@@ -316,8 +320,8 @@ function refreshPaymentPipelineChart() {
     })
 }
 
-setInterval(function () {
-    refreshLatencyChart();
-    refreshPaymentPipelineChart();
-    accountTable.ajax.reload();
-}, 5000);
+// setInterval(function () {
+//     refreshLatencyChart();
+//     refreshPaymentPipelineChart();
+//     accountTable.ajax.reload();
+// }, 5000);

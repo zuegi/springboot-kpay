@@ -34,25 +34,31 @@ public class ControlRestController {
     private ScheduledFuture<?> scheduledFuture;
 
     @GetMapping("paymentProducer/running")
-    @ResponseBody
     public Boolean isScheduledPaymentsIncomingProducerRunning() {
+        log.info("isRunning called: {}", isRunning());
        return isRunning();
     }
 
     @GetMapping("paymentProducer/start")
     public ResponseEntity<Void> startScheduledPaymentsIncomingProducer() {
-        scheduledFuture = taskScheduler.scheduleAtFixedRate(paymentsIncomingProducer.paymentProducer(), FIXED_RATE);
-        log.info("PaymentsIncomingProducer has been startet");
-        setRunning(true);
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        if(!isRunning()) {
+            scheduledFuture = taskScheduler.scheduleAtFixedRate(paymentsIncomingProducer.paymentProducer(), FIXED_RATE);
+            log.info("PaymentsIncomingProducer has been startet");
+            setRunning(true);
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        }
+        throw new IllegalArgumentException("Scheduler already running");
     }
 
     @GetMapping("paymentProducer/stop")
     public ResponseEntity<Void> stopScheduledPaymentIncomingProducer() {
-        scheduledFuture.cancel(false);
-        log.info("PaymentsIncomingProducer has been stopped");
-        setRunning(false);
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        if(isRunning()) {
+            scheduledFuture.cancel(false);
+            log.info("PaymentsIncomingProducer has been stopped");
+            setRunning(false);
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        }
+        throw new IllegalArgumentException("Scheduler not running");
     }
 
 
