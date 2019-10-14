@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public class PaymentsIncomingProducer {
+public class PaymentProducer {
 
 
     @Autowired

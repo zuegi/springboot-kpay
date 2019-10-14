@@ -1,8 +1,7 @@
-package ch.wesr.kpay.payments.processors;
+package ch.wesr.kpay.metrics.inflightstats;
 
 import ch.wesr.kpay.config.KpayBindings;
-import ch.wesr.kpay.payments.model.ConfirmedStats;
-import ch.wesr.kpay.payments.model.InflightStats;
+import ch.wesr.kpay.metrics.inflightstats.model.InflightStats;
 import ch.wesr.kpay.payments.model.Payment;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serdes;
@@ -20,38 +19,33 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @SuppressWarnings("unchecked")
-public class PaymentsConfirmedProcessor {
+public class PaymentsInFlightStatsProcessor {
 
-    long ONE_DAY = 24 * 60 * 60 * 1000L;
 
-    private final Materialized<String, ConfirmedStats, WindowStore<Bytes, byte[]>> confirmedStore;
-    private final Materialized<String, ConfirmedStats, WindowStore<Bytes, byte[]>> confirmedWindowStore;
+    private static long ONE_DAY = 24 * 60 * 60 * 1000L;
 
     Materialized<String, InflightStats, WindowStore<Bytes, byte[]>> inflightFirst;
     Materialized<String, InflightStats, WindowStore<Bytes, byte[]>> inflightWindowStore;
 
-
-    public PaymentsConfirmedProcessor(@Qualifier("valueConfirmedStatsJsonSerde") JsonSerde valueConfirmedStatsJsonSerde, @Qualifier("valueInflightStatsJsonSerde") JsonSerde valueInflightStatsJsonSerde) {
+    public PaymentsInFlightStatsProcessor(@Qualifier("valueInflightStatsJsonSerde") JsonSerde valueInflightStatsJsonSerde) {
         this.inflightFirst = Materialized.as(KpayBindings.PAYMENT_INFLIGHT_STORE);
         this.inflightWindowStore = inflightFirst.withKeySerde(new Serdes.StringSerde()).withValueSerde(
                 valueInflightStatsJsonSerde);
-
-        this.confirmedStore = Materialized.as(KpayBindings.PAYMENT_CONFIRMED_STORE);
-        this.confirmedWindowStore = confirmedStore.withKeySerde(new Serdes.StringSerde()).withValueSerde(
-                valueConfirmedStatsJsonSerde);
     }
 
-    @StreamListener
-    public void process(@Input(KpayBindings.PAYMENT_CONFIRMED_INPUT) KStream<String, Payment> confirmedStream) {
 
-        confirmedStream
-                .groupBy((key, value) -> Integer.toString(key.hashCode() % 10)) // redistribute to restricted key-set
-//                .groupByKey()
+    @StreamListener
+    public void process(@Input (KpayBindings.PAYMENT_INFLIGHTSTATS_INPUT) KStream<String, Payment> paymentKStream) {
+
+        paymentKStream
+                .filter((key, value) -> (value.getState() == Payment.State.incoming || value.getState() == Payment.State.complete))
+                //.groupBy((key, value) -> Integer.toString(key.hashCode() % 10))// reduce event key space for cross event aggregation
+                .groupByKey()
                 .windowedBy(TimeWindows.of(ONE_DAY))
                 .aggregate(
-                        ConfirmedStats::new,
+                        InflightStats::new,
                         (key, value, aggregate) -> aggregate.update(value),
-                        confirmedWindowStore
+                        inflightWindowStore
                 );
 
     }

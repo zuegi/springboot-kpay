@@ -2,11 +2,10 @@ package ch.wesr.kpay.rest;
 
 
 import ch.wesr.kpay.config.KpayBindings;
-import ch.wesr.kpay.metrics.model.ThroughputStats;
-import ch.wesr.kpay.metrics.processors.PaymentThroughputProcessor;
-import ch.wesr.kpay.payments.model.ConfirmedStats;
-import ch.wesr.kpay.payments.model.InflightStats;
-import ch.wesr.kpay.payments.processors.PaymentsConfirmedProcessor;
+import ch.wesr.kpay.metrics.confirmed.model.ConfirmedStats;
+import ch.wesr.kpay.metrics.inflightstats.model.InflightStats;
+import ch.wesr.kpay.metrics.throughput.PaymentThroughputProcessor;
+import ch.wesr.kpay.metrics.throughput.model.ThroughputStats;
 import ch.wesr.kpay.util.Pair;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.streams.state.QueryableStoreTypes;
@@ -51,7 +50,7 @@ public class MetricsController {
 
             List<Pair<String, InflightStats>> inflightStats = this.windowedKTableImpl.get(paymentInflightStore, new ArrayList<>(this.windowedKTableImpl.keySet(paymentInflightStore)));
 
-            inflightStats.sort(new Comparator<Pair<String, InflightStats>>() {
+         inflightStats.sort(new Comparator<Pair<String, InflightStats>>() {
                 @Override
                 public int compare(Pair<String, InflightStats> o1, Pair<String, InflightStats> o2) {
                     return Long.compare(o2.getV().getTimestamp(), o1.getV().getTimestamp());
@@ -59,12 +58,14 @@ public class MetricsController {
             });
 
             List<Pair<String, ConfirmedStats>> confirmedStats = this.windowedKTableImpl.get(confirmedStore, new ArrayList<>(this.windowedKTableImpl.keySet(confirmedStore)));
+
             confirmedStats.sort(new Comparator<Pair<String, ConfirmedStats>>() {
                 @Override
                 public int compare(Pair<String, ConfirmedStats> o1, Pair<String, ConfirmedStats> o2) {
                     return Long.compare(o2.getV().getTimestamp(), o1.getV().getTimestamp());
                 }
             });
+
 
             if (inflightStats.size() == 0 || confirmedStats.size() == 0) {
                 InflightStats inflightStats1 = new InflightStats();
@@ -86,9 +87,6 @@ public class MetricsController {
             while (confirmedIterator.hasNext()) {
                 confirmedStatsValue.add(confirmedIterator.next().getV());
             }
-
-            // FIXME Fake timestamp
-            //inflightStatsValue.setTimestamp(confirmedStatsValue.getTimestamp());
 
             return new Pair<>(inflightStatsValue, confirmedStatsValue);
         }

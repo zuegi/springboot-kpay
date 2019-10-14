@@ -20,8 +20,6 @@ public class PaymentIncomingProcessor {
     @StreamListener
     @SendTo(KpayBindings.PAYMENT_INCOMING_OUTPUT)
     public KStream<String, Payment> process(@Input(KpayBindings.PAYMENT_INCOMING_INPUT) KStream<String, Payment> paymentIncomingStream) {
-
-
         return paymentIncomingStream
                 .map((KeyValueMapper<String, Payment, KeyValue<String, Payment>>) (key, value) -> {
                     if (value.getState() == Payment.State.incoming) {

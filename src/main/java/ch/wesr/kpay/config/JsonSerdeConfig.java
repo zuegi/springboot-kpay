@@ -31,7 +31,7 @@ public class JsonSerdeConfig {
     public JsonSerde valueInflightStatsJsonSerde(ObjectMapper objectMapper) {
         JsonSerde jsonSerde = new JsonSerde(objectMapper);
         Map<String, String> configMap = new HashMap<>();
-        configMap.put("spring.json.value.default.type", "ch.wesr.kpay.payments.model.InflightStats");
+        configMap.put("spring.json.value.default.type", "ch.wesr.kpay.metrics.inflightstats.model.InflightStats");
         jsonSerde.configure(configMap, false);
         return jsonSerde;
     }
@@ -51,7 +51,7 @@ public class JsonSerdeConfig {
     public JsonSerde valueThroughputsStatsJsonSerde(ObjectMapper objectMapper) {
         JsonSerde jsonSerde = new JsonSerde(objectMapper);
         Map<String, String> configMap = new HashMap<>();
-        configMap.put("spring.json.value.default.type", "ch.wesr.kpay.metrics.model.ThroughputStats");
+        configMap.put("spring.json.value.default.type", "ch.wesr.kpay.metrics.throughput.model.ThroughputStats");
         jsonSerde.configure(configMap, false);
         return jsonSerde;
     }
@@ -61,7 +61,7 @@ public class JsonSerdeConfig {
     public JsonSerde valueConfirmedStatsJsonSerde(ObjectMapper objectMapper) {
         JsonSerde jsonSerde = new JsonSerde(objectMapper);
         Map<String, String> configMap = new HashMap<>();
-        configMap.put("spring.json.value.default.type", "ch.wesr.kpay.payments.model.ConfirmedStats");
+        configMap.put("spring.json.value.default.type", "ch.wesr.kpay.metrics.confirmed.model.ConfirmedStats");
         jsonSerde.configure(configMap, false);
         return jsonSerde;
     }

@@ -1,5 +1,6 @@
-package ch.wesr.kpay.payments.model;
+package ch.wesr.kpay.metrics.confirmed.model;
 
+import ch.wesr.kpay.payments.model.Payment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

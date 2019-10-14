@@ -1,6 +1,7 @@
 package ch.wesr.kpay.rest;
 
 import ch.wesr.kpay.config.KpayBindings;
+import ch.wesr.kpay.payments.model.AccountBalance;
 import ch.wesr.kpay.payments.model.Payment;
 import org.apache.kafka.streams.state.KeyValueIterator;
 import org.apache.kafka.streams.state.QueryableStoreTypes;
@@ -21,9 +22,9 @@ public class AccountRestController {
 
 
     @GetMapping("listAccounts")
-    public KeyValueIterator<String, Payment> listAccounts(){
+    public KeyValueIterator<String, AccountBalance> listAccounts(){
 
-        ReadOnlyKeyValueStore<String, Payment> paymentStore = interactiveQueryService.getQueryableStore(KpayBindings.ACCOUNT_BALANCE_STORE, QueryableStoreTypes.<String, Payment>keyValueStore());
+        ReadOnlyKeyValueStore<String, AccountBalance> paymentStore = interactiveQueryService.getQueryableStore(KpayBindings.ACCOUNT_BALANCE_STORE, QueryableStoreTypes.<String, AccountBalance>keyValueStore());
 
         if (paymentStore != null) {
             return paymentStore.all();

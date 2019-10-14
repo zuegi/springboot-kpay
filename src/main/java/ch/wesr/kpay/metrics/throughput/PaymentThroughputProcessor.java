@@ -1,7 +1,7 @@
-package ch.wesr.kpay.metrics.processors;
+package ch.wesr.kpay.metrics.throughput;
 
 import ch.wesr.kpay.config.KpayBindings;
-import ch.wesr.kpay.metrics.model.ThroughputStats;
+import ch.wesr.kpay.metrics.throughput.model.ThroughputStats;
 import ch.wesr.kpay.payments.model.Payment;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serdes;
@@ -35,7 +35,7 @@ public class PaymentThroughputProcessor {
         this.completeWindowStore = completeStore.withKeySerde(new Serdes.StringSerde()).withValueSerde(valueThroughputsStatsJsonSerde);
     }
 
-    @StreamListener
+    //@StreamListener
     public void process(@Input(KpayBindings.PAYMENT_THROUGHPUT_INPUT) KStream<String, Payment> complete) {
         log.info("complete: " + complete);
         statsKTable = complete

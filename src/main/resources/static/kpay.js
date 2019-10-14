@@ -4,6 +4,27 @@ var accountTable;
 
 $(document).ready(function () {
 
+    $( function() {
+        $("#timingSlider").slider({
+            range: "min",
+            value: 500,
+            min: 10,
+            max: 30000,
+            slide: function (event, ui) {
+                $("#timingSliderInfo").val( ui.value + " ms");
+
+                $.ajax({
+                    method: 'GET',
+                    url: '/api/control/paymentProducer/adjustRate/'+ui.value
+                });
+            }
+
+        });
+        $("#timingSliderInfo").val( $("#timingSlider").slider("value") + " ms");
+    });
+
+
+
     accountTable = $('#accountTable').DataTable({
         ajax: {
             url: 'http://localhost:8080/api/listAccounts',
@@ -24,13 +45,7 @@ $(document).ready(function () {
         ]
     });
 
-    if(isPaymentRunningFunc()) {
-        $('#startPayments').prop('disabled', true);
-        $('#pausePayments').prop('disabled', false);
-    } else {
-        $('#startPayments').prop('disabled', false);
-        $('#pausePayments').prop('disabled', true);
-    }
+    refreshStartPauseButtons();
 
     /* Start Payments Button*/
     $('#startPayments').click(function () {
@@ -71,6 +86,16 @@ function createStuff() {
     refreshPaymentPipelineChart();
     isPaymentRunningFunc();
 
+}
+
+function refreshStartPauseButtons(){
+    if(isPaymentRunningFunc()) {
+        $('#startPayments').prop('disabled', true);
+        $('#pausePayments').prop('disabled', false);
+    } else {
+        $('#startPayments').prop('disabled', false);
+        $('#pausePayments').prop('disabled', true);
+    }
 }
 
 function isPaymentRunningFunc() {
@@ -324,4 +349,5 @@ setInterval(function () {
     refreshLatencyChart();
     refreshPaymentPipelineChart();
     accountTable.ajax.reload();
+    refreshStartPauseButtons();
 }, 5000);

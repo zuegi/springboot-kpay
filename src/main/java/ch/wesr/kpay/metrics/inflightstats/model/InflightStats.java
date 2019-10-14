@@ -1,5 +1,6 @@
-package ch.wesr.kpay.payments.model;
+package ch.wesr.kpay.metrics.inflightstats.model;
 
+import ch.wesr.kpay.payments.model.Payment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,7 @@ public class InflightStats {
     private long timestamp;
 
     public InflightStats update(Payment value) {
-        log.debug(" InflightStats. update, processing:{} current:{} state:{}", value, this.amount, value.getState());
+        log.info(" InflightStats. update, processing:{} current amount:{} state:{}", value, this.amount, value.getState());
 
         this.timestamp = System.currentTimeMillis();
         if (value.getState() == Payment.State.incoming) {
@@ -31,6 +32,8 @@ public class InflightStats {
             this.amount = this.amount.subtract(value.getAmount()).setScale(2, RoundingMode.CEILING);
             this.count--;
         }
+        log.info(" InflightStats. update completed, processing:{} current amount:{} state:{}", value, this.amount, value.getState());
+
         return this;
     }
 

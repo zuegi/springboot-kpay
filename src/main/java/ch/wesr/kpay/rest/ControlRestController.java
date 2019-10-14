@@ -1,16 +1,13 @@
 package ch.wesr.kpay.rest;
 
-import ch.wesr.kpay.payments.PaymentsIncomingProducer;
+import ch.wesr.kpay.payments.PaymentProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.TaskScheduler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.ScheduledFuture;
 
@@ -21,30 +18,34 @@ public class ControlRestController {
 
 
     @Value("${kpay.scheduled.paymentsIncomingProducer.fixedRate}")
-    private long FIXED_RATE;
-
-    private Boolean running = false;
+    private long fixedRate;
 
     @Autowired
     private TaskScheduler taskScheduler;
 
     @Autowired
-    private PaymentsIncomingProducer paymentsIncomingProducer;
+    private PaymentProducer paymentProducer;
 
     private ScheduledFuture<?> scheduledFuture;
 
     @GetMapping("paymentProducer/running")
     public Boolean isScheduledPaymentsIncomingProducerRunning() {
-        log.info("isRunning called: {}", isRunning());
        return isRunning();
     }
 
     @GetMapping("paymentProducer/start")
     public ResponseEntity<Void> startScheduledPaymentsIncomingProducer() {
+        return startProducer();
+    }
+
+    private ResponseEntity<Void> startProducer() {
+        return start();
+    }
+
+    private ResponseEntity<Void> start() {
         if(!isRunning()) {
-            scheduledFuture = taskScheduler.scheduleAtFixedRate(paymentsIncomingProducer.paymentProducer(), FIXED_RATE);
+            scheduledFuture = taskScheduler.scheduleAtFixedRate(paymentProducer.paymentProducer(), fixedRate);
             log.info("PaymentsIncomingProducer has been startet");
-            setRunning(true);
             return new ResponseEntity<Void>(HttpStatus.OK);
         }
         throw new IllegalArgumentException("Scheduler already running");
@@ -52,10 +53,20 @@ public class ControlRestController {
 
     @GetMapping("paymentProducer/stop")
     public ResponseEntity<Void> stopScheduledPaymentIncomingProducer() {
+        return stop();
+    }
+
+    @GetMapping("paymentProducer/adjustRate/{newRate}")
+    public synchronized void adjustRate(@PathVariable("newRate") Long newRate) {
+            this.fixedRate = newRate;
+            if (isRunning()) { stop(); }
+            start();
+    }
+
+    private ResponseEntity<Void> stop() {
         if(isRunning()) {
             scheduledFuture.cancel(false);
             log.info("PaymentsIncomingProducer has been stopped");
-            setRunning(false);
             return new ResponseEntity<Void>(HttpStatus.OK);
         }
         throw new IllegalArgumentException("Scheduler not running");
@@ -63,10 +74,8 @@ public class ControlRestController {
 
 
     public Boolean isRunning() {
-        return running;
+        return this.scheduledFuture != null && !this.scheduledFuture.isCancelled() && !this.scheduledFuture.isDone();
     }
 
-    public void setRunning(Boolean running) {
-        this.running = running;
-    }
+
 }

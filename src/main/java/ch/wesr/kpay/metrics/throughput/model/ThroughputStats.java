@@ -1,4 +1,4 @@
-package ch.wesr.kpay.metrics.model;
+package ch.wesr.kpay.metrics.throughput.model;
 
 import ch.wesr.kpay.payments.model.Payment;
 import lombok.extern.slf4j.Slf4j;
