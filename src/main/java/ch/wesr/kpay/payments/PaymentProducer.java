@@ -33,7 +33,7 @@ public class PaymentProducer {
             String txnId = "pay-" + UUID.randomUUID().toString();
             long currentTimeMillis = System.currentTimeMillis();
             Payment payment = new Payment(txnId, txnId, from, to, new BigDecimal(Math.round((Math.random() * 100.0) * 100.0) / 100.0).setScale(2, RoundingMode.CEILING), Payment.State.incoming, currentTimeMillis);
-            log.info("Sent message: " + payment);
+            log.debug("Sent message: " + payment);
             this.paymentSourceMessagingGateway.publishPayment(payment, payment.getTxnId().getBytes());
         };
     }

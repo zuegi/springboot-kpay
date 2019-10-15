@@ -30,13 +30,13 @@ public class PaymentAccountProcessor {
     public PaymentAccountProcessor(@Qualifier("valueAccountBalanceJsonSerde") JsonSerde valueJsonSerde) {
         this.account = Materialized.as(KpayBindings.ACCOUNT_BALANCE_STORE);
         this.accountStore = account.withKeySerde(new Serdes.StringSerde()).withValueSerde(
-                valueJsonSerde);
+                valueJsonSerde).withCachingDisabled();
+
     }
 
     @StreamListener
     @SendTo(KpayBindings.PAYMENT_ACCOUNT_OUTPUT)
     public KStream<String, Payment> process(@Input(KpayBindings.PAYMENT_ACCOUNT_INPUT) KStream<String, Payment> paymentAccountStream) {
-
         Predicate<String, Payment> isDebitOrCreditRecord =  (key, value) ->  (value.getState() == Payment.State.debit || value.getState() == Payment.State.credit) ;
 
         /*
