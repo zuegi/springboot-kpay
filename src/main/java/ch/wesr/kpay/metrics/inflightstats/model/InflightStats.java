@@ -20,7 +20,7 @@ public class InflightStats {
     private long timestamp;
 
     public InflightStats update(Payment value) {
-        log.info(" InflightStats. update, processing:{} current amount:{} state:{}", value, this.amount, value.getState());
+        log.debug(" InflightStats. update, processing:{} current amount:{} state:{}", value, this.amount, value.getState());
 
         this.timestamp = System.currentTimeMillis();
         if (value.getState() == Payment.State.incoming) {
@@ -32,7 +32,7 @@ public class InflightStats {
             this.amount = this.amount.subtract(value.getAmount()).setScale(2, RoundingMode.CEILING);
             this.count--;
         }
-        log.info(" InflightStats. update completed, processing:{} current amount:{} state:{}", value, this.amount, value.getState());
+        log.debug(" InflightStats. update completed, processing:{} current amount:{} state:{}", value, this.amount, value.getState());
 
         return this;
     }

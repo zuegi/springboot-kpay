@@ -37,6 +37,7 @@ $(document).ready(function () {
         "columns": [
             {"data": "value.name"},
             {"data": "value.amount"},
+            {"data": "value.lastAmount"},
             {"data": "value.lastPayment.amount"},
             {"data": "value.lastPayment.txnId"},
             {"data": "value.lastPayment.from"},

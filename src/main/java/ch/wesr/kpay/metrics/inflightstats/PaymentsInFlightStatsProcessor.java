@@ -39,7 +39,7 @@ public class PaymentsInFlightStatsProcessor {
 
         paymentKStream
                 .filter((key, value) -> (value.getState() == Payment.State.incoming || value.getState() == Payment.State.complete))
-                //.groupBy((key, value) -> Integer.toString(key.hashCode() % 10))// reduce event key space for cross event aggregation
+//                .groupBy((key, value) -> Integer.toString(key.hashCode() % 10))// reduce event key space for cross event aggregation
                 .groupByKey()
                 .windowedBy(TimeWindows.of(ONE_DAY))
                 .aggregate(

@@ -35,7 +35,7 @@ public class PaymentThroughputProcessor {
         this.completeWindowStore = completeStore.withKeySerde(new Serdes.StringSerde()).withValueSerde(valueThroughputsStatsJsonSerde);
     }
 
-    //@StreamListener
+    @StreamListener
     public void process(@Input(KpayBindings.PAYMENT_THROUGHPUT_INPUT) KStream<String, Payment> complete) {
         log.info("complete: " + complete);
         statsKTable = complete
@@ -58,6 +58,7 @@ public class PaymentThroughputProcessor {
             }
             processedLast = key.window().end();
         });
+
     }
 
     /**

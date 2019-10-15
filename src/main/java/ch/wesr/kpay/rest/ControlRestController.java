@@ -45,7 +45,7 @@ public class ControlRestController {
     private ResponseEntity<Void> start() {
         if(!isRunning()) {
             scheduledFuture = taskScheduler.scheduleAtFixedRate(paymentProducer.paymentProducer(), fixedRate);
-            log.info("PaymentsIncomingProducer has been startet");
+            log.debug("PaymentsIncomingProducer has been startet");
             return new ResponseEntity<Void>(HttpStatus.OK);
         }
         throw new IllegalArgumentException("Scheduler already running");
@@ -66,7 +66,7 @@ public class ControlRestController {
     private ResponseEntity<Void> stop() {
         if(isRunning()) {
             scheduledFuture.cancel(false);
-            log.info("PaymentsIncomingProducer has been stopped");
+            log.debug("PaymentsIncomingProducer has been stopped");
             return new ResponseEntity<Void>(HttpStatus.OK);
         }
         throw new IllegalArgumentException("Scheduler not running");

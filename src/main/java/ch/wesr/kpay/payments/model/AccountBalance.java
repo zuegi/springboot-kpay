@@ -10,6 +10,12 @@ import java.math.RoundingMode;
 @Slf4j
 public class AccountBalance {
 
+    private String name;
+
+    private Payment lastPayment;
+    private BigDecimal amount = new BigDecimal(0).setScale(2, RoundingMode.CEILING);
+    private BigDecimal lastAmount = new BigDecimal(0).setScale(2, RoundingMode.CEILING);
+
     public String getName() {
         return name;
     }
@@ -18,14 +24,9 @@ public class AccountBalance {
         this.name = name;
     }
 
-    private String name;
-
     public void setLastPayment(Payment lastPayment) {
         this.lastPayment = lastPayment;
     }
-
-    private Payment lastPayment;
-    private BigDecimal amount = new BigDecimal(0).setScale(2, RoundingMode.CEILING);
 
     public BigDecimal getAmount() {
         return amount.setScale(2, RoundingMode.CEILING);
@@ -38,8 +39,7 @@ public class AccountBalance {
     public AccountBalance handle(String key, Payment value) {
 
         this.name = value.getId();
-
-        log.debug("handle: {} : {} ", "not-set", value);
+        this.lastAmount = this.amount;
 
         if (value.getState() == Payment.State.debit) {
             this.amount = this.amount.subtract(value.getAmount().setScale(2, RoundingMode.CEILING));
@@ -70,4 +70,11 @@ public class AccountBalance {
     }
 
 
+    public BigDecimal getLastAmount() {
+        return lastAmount;
+    }
+
+    public void setLastAmount(BigDecimal lastAmount) {
+        this.lastAmount = lastAmount;
+    }
 }
