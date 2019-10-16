@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.concurrent.ScheduledFuture;
 
 @Slf4j
@@ -61,6 +62,11 @@ public class ControlRestController {
             this.fixedRate = newRate;
             if (isRunning()) { stop(); }
             start();
+    }
+
+    @GetMapping("paymentProducer/send")
+    public  void send() {
+        taskScheduler.schedule(paymentProducer.paymentProducer(), new Date());
     }
 
     private ResponseEntity<Void> stop() {

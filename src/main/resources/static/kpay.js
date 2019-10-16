@@ -73,6 +73,13 @@ $(document).ready(function () {
         }
     });
 
+
+    $('#sendPayment').click(function () {
+            $.get({
+                url: "/api/control/paymentProducer/send"
+            });
+    });
+
     createStuff();
 
 
