@@ -24,6 +24,7 @@ There is still a lot to do, but try it out and improve
 * or if you run Windows
     * up.bat
     * down.bat
+ 
 ## Inspired by and copied from
 
 * [Original Kpay from Confluent](https://github.com/confluentinc/demo-scene/tree/master/scalable-payment-processing)
