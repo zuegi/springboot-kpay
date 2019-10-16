@@ -204,7 +204,12 @@ function createLatencyChart() {
             scales: {
                 xAxes: [{
                     type: 'time',
-                    distribution: 'series'
+                    distribution: 'series',
+                    ticks: {
+                        autoSkip: false,
+                        maxRotation: 45,
+                        minRotation: 45
+                    },
                 }],
                 yAxes: [{
                     scaleLabel: {
@@ -302,6 +307,14 @@ function createPaymentPipelineChart() {
             scales: {
                 xAxes: [{
                     type: 'time',
+                    time: {
+                        round: "true"
+                    },
+                    ticks: {
+                        autoSkip: false,
+                        maxRotation: 45,
+                        minRotation: 45
+                    },
                     distribution: 'series'
                 }],
                 yAxes: [{
