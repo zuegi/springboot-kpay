@@ -19,11 +19,11 @@ There is still a lot to do, but try it out and improve
 * Kafka running - best run [Confluent within docker](https://docs.confluent.io/current/quickstart/ce-docker-quickstart.html)
 * Install Docker
 * cd in [confluent](../confluent) and run
-    * docker-compose up -d
-    * docker-compose down -v 
+    * `docker-compose up -d`
+    * `docker-compose down -v` 
 * or if you run Windows
-    * up.bat
-    * down.bat
+    * `up.bat`
+    * `down.bat`
  
 ## Inspired by and copied from
 
