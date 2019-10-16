@@ -16,8 +16,14 @@ There is still a lot to do, but try it out and improve
  - REST: http://localhost:8080/api/listAccounts
 
 ## Requirements
- - Kafka running - best run [Confluent within docker](https://docs.confluent.io/current/quickstart/ce-docker-quickstart.html)
-
+* Kafka running - best run [Confluent within docker](https://docs.confluent.io/current/quickstart/ce-docker-quickstart.html)
+* Install Docker
+* cd in [confluent](../confluent) and run
+    * docker-compose up -d
+    * docker-compose down -v 
+* or if you run Windows
+    * up.bat
+    * down.bat
 ## Inspired by and copied from
 
 * [Original Kpay from Confluent](https://github.com/confluentinc/demo-scene/tree/master/scalable-payment-processing)
