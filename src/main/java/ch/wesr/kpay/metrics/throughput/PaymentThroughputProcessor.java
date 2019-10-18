@@ -37,7 +37,7 @@ public class PaymentThroughputProcessor {
 
     @StreamListener
     public void process(@Input(KpayBindings.PAYMENT_THROUGHPUT_INPUT) KStream<String, Payment> complete) {
-        log.info("complete: " + complete);
+
         statsKTable = complete
                 .filter((key, value) -> value.getState() == Payment.State.complete)
                 .groupBy((key, value) -> "all-payments") // forces a repartition

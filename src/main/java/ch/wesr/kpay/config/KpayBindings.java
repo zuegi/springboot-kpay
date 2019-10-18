@@ -24,8 +24,6 @@ public interface KpayBindings {
     String PAYMENT_ACCOUNT_OUTPUT = "paymentAccountOutput";
 
 
-    String PAYMENT_INFLIGHTSTATS_INPUT = "paymentInflightStatsInput";
-
     String PAYMENT_COMPLETE_INPUT = "paymentCompleteInput";
     String PAYMENT_COMPLETE_OUTPUT = "paymentCompleteOutput";
 
@@ -34,6 +32,7 @@ public interface KpayBindings {
 
     String PAYMENT_CONFIRMED_INPUT = "paymentConfirmedInput";
 
+    String PAYMENT_INFLIGHTSTATS_INPUT = "paymentInflightStatsInput";
     @Input(PAYMENT_INFLIGHTSTATS_INPUT)
     KStream<String, Payment> paymentInflightsInput();
 
