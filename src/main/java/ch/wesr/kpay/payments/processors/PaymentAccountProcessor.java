@@ -44,6 +44,7 @@ public class PaymentAccountProcessor {
          * KTable<String, AccountBalance> ktable
          */
         paymentAccountStream
+                .peek((key, value) -> log.debug("key: {}, value: {}", key, value))
                 .filter(isDebitOrCreditRecord)
                 .groupByKey()
                 .aggregate(
